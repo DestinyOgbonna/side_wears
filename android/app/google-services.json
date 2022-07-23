@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "924828243229",
+    "project_id": "lordwears",
+    "storage_bucket": "lordwears.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924828243229:android:558dbbc1895afbff6c7df4",
+        "android_client_info": {
+          "package_name": "com.example.building_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924828243229-9qv65v3pbm1ugcu5mi0kjofbgch4nvbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkpXePsm3I489Pai9qX47UvYi2TNr_s_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924828243229-9qv65v3pbm1ugcu5mi0kjofbgch4nvbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
