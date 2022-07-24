@@ -1,5 +1,5 @@
-
 import 'package:building_ui/exports/exports.dart';
+
 class ShoeSizes extends StatelessWidget {
   const ShoeSizes({Key? key, required this.size}) : super(key: key);
   final String size;
@@ -10,8 +10,8 @@ class ShoeSizes extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(color: AppColors.whiteColor),
           borderRadius: BorderRadius.circular(15)),
-      height: 40,
-      width: 60,
+      height: 25.0.h,
+      width: 50.0.h,
       child: Text(size, style: AppStyles.productText),
     );
   }

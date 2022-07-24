@@ -14,8 +14,8 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
   Widget build(BuildContext context) {
     return Scaffold(
      
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
         child: MyAppBar(
           isSettings: false,
           title: 'Select Payment',

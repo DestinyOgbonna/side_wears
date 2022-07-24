@@ -8,17 +8,34 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
   addtoCart() async {
     try {
       final productsModel = Product(
-        producrPrice: '',
-        productDescription: '',
-        productName: '',
-        productImages: [],
+        productPrice: "product_price",
+        productName: '"product_name"',
+        productImages: ["product_image"],
       );
-      final docRef = FirebaseFirestore.instance
-          .collection('users')
+      final docRef = _firestoreCollectionService.cartRef
           .doc(FirebaseAuth.instance.currentUser!.uid);
       await docRef.set(
         productsModel.toFirestore(),
-      );
+      ).then((value) =>  Fluttertoast.showToast(
+                msg: "Added to cart",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.SNACKBAR,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0)) .catchError((err) {
+            Fluttertoast.showToast(
+                msg: err.message,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.SNACKBAR,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          //  state = state.copyWith(loadingState: LoadingState.error);
+          });
+        return addtoCart;
+      
     } on FirebaseException catch (e) {
       Fluttertoast.showToast(
           msg: '${e.message}',
@@ -32,5 +49,7 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
     }
   }
 }
+
+getSingleProductDetails() {}
 
 class ProductDetailsViewState {}

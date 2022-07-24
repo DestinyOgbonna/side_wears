@@ -35,7 +35,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           darkTheme: MyThemes.darkTheme,
           routeInformationParser: appRouter.defaultRouteParser(),
           routerDelegate: appRouter.delegate(),
-          themeMode: ThemeMode.dark,
+          themeMode: ThemeMode.light,
         );
       },
     );

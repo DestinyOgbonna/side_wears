@@ -1,7 +1,7 @@
 import 'package:building_ui/exports/exports.dart';
 
 class MyAppBar extends ConsumerWidget {
-  MyAppBar(
+  const MyAppBar(
       {Key? key,
       required this.title,
       this.isProfile,
@@ -9,7 +9,7 @@ class MyAppBar extends ConsumerWidget {
       required this.isSettings})
       : super(key: key);
 
-  String? title;
+  final String? title;
   final bool? isSettings;
   final bool? isProfile;
   final void Function()? onPressed;
@@ -18,6 +18,7 @@ class MyAppBar extends ConsumerWidget {
     bool _isSetting = isSettings ?? false;
     bool _isProfile = isProfile ?? false;
     return AppBar(
+      backgroundColor: AppColors.whiteColor,
       leading: _isProfile
           ? const Text('')
           : InkWell(

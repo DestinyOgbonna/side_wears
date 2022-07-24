@@ -1,4 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.dart';
 import 'package:building_ui/screens/profile_update/profile_update_viewmode;.dart';
 import 'package:building_ui/screens/settings/settings_viewmodel.dart';
 
@@ -22,3 +23,6 @@ final myProfileScreenModel =
 final mySettingsScreenModel =
     StateNotifierProvider<SettingsViewModel, SettingsViewState>(
         ((ref) => SettingsViewModel(ref.read)));
+final myProductsDetailsScreenModel =
+    StateNotifierProvider<ProductDetailsViewModel, ProductDetailsViewState>(
+        ((ref) => ProductDetailsViewModel()));

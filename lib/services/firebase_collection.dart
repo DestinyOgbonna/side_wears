@@ -6,11 +6,13 @@ class FirestoreCollectionService {
 
  
   final CollectionReference productsRef =
-      FirebaseFirestore.instance.collection('Products');
+      FirebaseFirestore.instance.collection('products');
 
 // a new reference for adding to cart
   final CollectionReference usersRef =
-      FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('users');
+  final CollectionReference cartRef =
+      FirebaseFirestore.instance.collection('cart');
 
   
 }

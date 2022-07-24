@@ -3,13 +3,13 @@ import 'package:building_ui/exports/exports.dart';
 class Product {
   final String? productName;
   final String? productDescription;
-  final String? producrPrice;
+  final String? productPrice;
   final List<String>? productImages;
 
   Product({
     this.productName,
     this.productDescription,
-    this.producrPrice,
+    this.productPrice,
     this.productImages,
   });
 
@@ -20,7 +20,7 @@ class Product {
     final data = snapshot.data();
     return Product(
       productName: data?['product_name'],
-      producrPrice: data?['product_price'],
+      productPrice: data?['product_price'],
       productDescription: data?['product_description'],
       productImages: data?['product_image'] is Iterable
           ? List.from(data?['product_image'])
@@ -31,7 +31,7 @@ class Product {
   Map<String, dynamic> toFirestore() {
     return {
       if (productName != null) "product_name": productName,
-      if (producrPrice != null) "product_price": producrPrice,
+      if (productPrice != null) "product_price": productPrice,
       if (productDescription != null) "product_description": productDescription,
       if (productImages != null) "product_image": productImages,
     };

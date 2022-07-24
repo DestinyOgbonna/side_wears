@@ -9,7 +9,7 @@ class AddressPage extends ConsumerWidget {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0.h),
-          child: MyAppBar(
+          child: const MyAppBar(
             isSettings: false,
             title: 'Enter Address',
           ),

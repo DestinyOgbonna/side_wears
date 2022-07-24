@@ -6,8 +6,8 @@ class CardPayment extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
         child: MyAppBar(
           isSettings: false,
           title: 'Select Payment',

@@ -88,7 +88,7 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.ProductDetails]
 class ProductDetailsRoute extends _i3.PageRouteInfo<void> {
-  const ProductDetailsRoute({required String productId})
+  const ProductDetailsRoute()
       : super(ProductDetailsRoute.name, path: '/product_details');
 
   static const String name = 'ProductDetailsRoute';

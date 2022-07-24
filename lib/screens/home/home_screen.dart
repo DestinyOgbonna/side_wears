@@ -10,10 +10,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final CollectionReference productRef = FirebaseFirestore.instance
-      .collection('products'); //!TODO Learn Dependency INjection
-  final CollectionReference userRef = FirebaseFirestore.instance
-      .collection('users'); //!TODO Learn Dependency INjection
+  final FirestoreCollectionService _firestoreCollectionService =
+      FirestoreCollectionService();
 
   @override
   void initState() {
@@ -48,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(right: 90.0),
                         child: FutureBuilder<DocumentSnapshot>(
-                            future: userRef
+                            future: _firestoreCollectionService.usersRef
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
                                 .get(),
                             builder: (BuildContext context,
@@ -68,9 +66,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Map<String, dynamic> data = snapshot.data!
                                     .data() as Map<String, dynamic>;
 
-                                return Text(
-                                  'Welcome: ${data['username']}',
-                                  style: AppStyles.normalgreyText,
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 48.0),
+                                  child: Text(
+                                    'Good Day, ${data['username']}',
+                                    style: AppStyles.normalgreyText,
+                                  ),
                                 );
                               }
                               return const Center(child: Text('No data'));
@@ -83,92 +84,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30.0.h),
-                  Stack(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 13),
-                        decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(19.0.r))),
-                        height: ScreenUtil().setHeight(90.0.h),
-                        width: double.infinity,
+                  SizedBox(height: 22.0.h),
+                  Container(
+                    height: 150.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0.r),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 4.0.h),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          decoration: BoxDecoration(
-                              color: AppColors.lightFadedBlueColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0.r))),
-                          height: ScreenUtil().setHeight(90.0.h),
-                          width: double.infinity,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9.0.h),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0.r)),
-                              gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    AppColors.lightBlueColor,
-                                    AppColors.lightOrangeColor
-                                  ])),
-                          height: ScreenUtil().setHeight(115.0.h),
-                          width: double.infinity,
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 18.0,
-                                ),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 22.0.h),
-                                            Text(
-                                                'New items with \nfree shipping',
-                                                style: AppStyles.boldwhiteText),
-                                            SizedBox(height: 24.0.h),
-                                            Container(
-                                              alignment: Alignment.center,
-                                              height: 40.0.h,
-                                              width: 120.0.h,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.whiteColor,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              5.0.r))),
-                                              child: Text(
-                                                'Check',
-                                                style: AppStyles.smallblackText,
-                                              ),
-                                            )
-                                          ]),
-                                      Image.asset(
-                                        'assets/images/shoe.png',
-                                        height: 100.0.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ]),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      image: const DecorationImage(
+                          image: AssetImage('assets/images/st.jpg'),
+                          fit: BoxFit.cover),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8.0.h, left: 10.0.w),
+                      child: Text('New items with \nfree shipping',
+                          style: AppStyles.boldwhiteText),
+                    ),
                   ),
                   const SizedBox(
                     height: 19,
@@ -213,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Text('Sneakers for you', style: AppStyles.normalgreyText),
                   SizedBox(height: 15.0.h),
                   FutureBuilder<QuerySnapshot>(
-                    future: productRef.get(),
+                    future: _firestoreCollectionService.productsRef.get(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot?> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -239,7 +172,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 (document) {
                                   return InkWell(
                                     onTap: () {
-                                        context.router.push( ProductDetailsRoute(productId: document.id));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProductDetails(
+                                            productId: document.id,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Sneakers(
                                       prodImage: (document.data()

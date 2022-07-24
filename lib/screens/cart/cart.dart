@@ -13,7 +13,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0.h),
-        child: MyAppBar(
+        child: const MyAppBar(
           isSettings: false,
           title: 'Cart',
         ),

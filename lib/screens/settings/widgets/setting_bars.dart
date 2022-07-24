@@ -39,6 +39,7 @@ class AccountsBar extends ConsumerWidget {
   }
 }
 
+// ignore: must_be_immutable
 class SettingsBar extends ConsumerStatefulWidget {
   SettingsBar({
     this.isSwitched = false,

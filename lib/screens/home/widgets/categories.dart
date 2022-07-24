@@ -1,6 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
 
-
 class Categories extends StatelessWidget {
   final String image;
   final String title;
@@ -13,7 +12,7 @@ class Categories extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: const Color(0XFF081936),
-          radius: 30,
+          radius: 25.r,
           child: Image.asset(
             image,
             height: 30,

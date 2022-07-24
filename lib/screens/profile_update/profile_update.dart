@@ -27,7 +27,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0.h),
-        child: MyAppBar(
+        child: const MyAppBar(
           isSettings: true,
           title: 'Update Profile',
           isProfile: false,
@@ -45,7 +45,9 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
             Center(
               child: InkWell(
                 onTap: () {
-                  ref.read(myProfileScreenModel.notifier).uploadProfileImageToFirebase();
+                  ref
+                      .read(myProfileScreenModel.notifier)
+                      .uploadProfileImageToFirebase();
                 },
                 child: CircleAvatar(
                   backgroundColor: AppColors.lightgreyColor,
@@ -53,7 +55,10 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
                   maxRadius: 45.0.r,
                   child: ref.read(myProfileScreenModel.notifier).image != null
                       ? Image.network(
-                          ref.read(myProfileScreenModel.notifier).image.toString(),
+                          ref
+                              .read(myProfileScreenModel.notifier)
+                              .image
+                              .toString(),
                           fit: BoxFit.cover,
                         )
                       : Icon(

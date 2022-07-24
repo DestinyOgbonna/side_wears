@@ -1,4 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Sneakers extends StatelessWidget {
   final String prodImage;
@@ -15,30 +16,48 @@ class Sneakers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 350.0.h,
-      width: 80.0.w,
-      child: Card(
-        //  elevation: 100,
-        color: AppColors.darkerBlueColor.withOpacity(1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              prodImage,
-              height: 100.0.h,
+    return Card(
+      //  elevation: 100,
+      color: AppColors.darkerBlueColor.withOpacity(1),
+
+      child: Stack(
+        children: [
+          Container(
+            height: 350.0.h,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: CachedNetworkImageProvider(prodImage),
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.circular(5.0.r),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(prodPrice, style: AppStyles.normalgreyText),
+          ),
+          Positioned(
+            top: 100.0.h,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.whiteColor.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(5.0.r),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+              height: 40.0.h,
+              width: 145.0.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(prodName, style: AppStyles.smallgreyText),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(prodPrice, style: AppStyles.normalgreyText),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 5.0.h),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(prodName, style: AppStyles.smallgreyText),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
