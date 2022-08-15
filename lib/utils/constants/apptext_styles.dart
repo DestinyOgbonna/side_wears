@@ -11,16 +11,16 @@ class AppStyles {
   // );
   static const FontWeight _normalWeight = FontWeight.w500;
   static const FontWeight _boldWeight = FontWeight.w700;
-  static TextStyle boldwhiteText = GoogleFonts.lato(
-    fontSize: 22.sp,
-    color: AppColors.lightgreyColor,
-    fontWeight: _boldWeight,
-  );
   static TextStyle boldgreyText = GoogleFonts.lato(
     fontSize: 22.sp,
     color: AppColors.lightgreyColor,
     fontWeight: _boldWeight,
   );
+  // static TextStyle boldgreyText = GoogleFonts.lato(
+  //   fontSize: 22.sp,
+  //   color: AppColors.lightgreyColor,
+  //   fontWeight: _boldWeight,
+  // );
   static TextStyle normalgreyText = GoogleFonts.lato(
     fontSize: 19.sp,
     color: AppColors.lightgreyColor,

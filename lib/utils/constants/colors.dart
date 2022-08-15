@@ -6,7 +6,7 @@ class AppColors {
   static const Color primaryColor = Color(0xffffffff);
   static const Color lightprimaryColor = Color(0XFF0C1C39);
   static const Color whiteColor = Color(0xffffffff);
-  static const Color darkColor = Color(0xff040E22);
+  static const Color darkColor = Color.fromARGB(255, 1, 5, 13);
   static const Color lightgreyColor = Color(0XFF53617E);
   static const Color lightFadedBlueColor = Color(0XFF192B4E);
   static const Color lightOrangeColor = Color(0XFFD6834E);
@@ -16,5 +16,5 @@ class AppColors {
   static const Color lightBrownColor = Color(0XFF644959);
   static const Color blackColor = Color(0XFF000000);
   static const Color redColor = Color.fromARGB(255, 251, 3, 3);
-  static const Color bluegreyColor = Color.fromARGB(255, 72, 49, 102);
+  static const Color purpleColor = Color.fromARGB(255, 72, 49, 102);
 }

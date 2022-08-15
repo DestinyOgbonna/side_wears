@@ -36,7 +36,7 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
       state = state.copyWith(loadingState: LoadingState.error);
       context.router.push(const SignInPageRoute());
     } else {
-      final signUser =  _readServices(firebaseProvider)
+      final signUser =_readServices(firebaseProvider)
           .signInWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())

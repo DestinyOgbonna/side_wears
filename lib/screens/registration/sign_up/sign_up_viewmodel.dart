@@ -94,7 +94,7 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid);
       await docRef.set(
-        userModel.toJson(),
+        userModel.toFirestore(),
       );
     } on FirebaseException catch (e) {
       Fluttertoast.showToast(

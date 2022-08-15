@@ -23,9 +23,14 @@ class _SearchViewState extends ConsumerState<SearchView> {
                 hintText: 'Search',
                 controller: searchController,
                 obscureText: false,
+                suffixIcon: const Icon(
+                  Icons.search,
+                  color: AppColors.primaryColor,
+                ),
               ),
-              
             ),
+            const Align(
+                alignment: Alignment.bottomCenter, child: Text('NO Item Found'))
           ],
         ),
       ),

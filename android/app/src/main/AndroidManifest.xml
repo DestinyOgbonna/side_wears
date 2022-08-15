@@ -3,9 +3,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <application
-        android:label="building_ui"
+        android:label="Lord Wears"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/ic_stat_download">
         <activity
             android:name=".MainActivity"
             android:exported="true"

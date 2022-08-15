@@ -17,7 +17,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   void initState() {
     super.initState();
     ref.read(mySplashScreenModel.notifier).checkInternetConnection();
-    ref.read(mySignInViewmodel.notifier).saveUserLoginState(context);
+  
   }
 
   @override

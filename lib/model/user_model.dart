@@ -1,21 +1,31 @@
+import 'package:building_ui/exports/exports.dart';
+
 class UserModel {
+  String? id;
   String? name;
   String? email;
   String? username;
 
-  UserModel({this.name, this.email, this.username});
+  UserModel({this.name, this.email, this.username, this.id});
 
- UserModel fromJson(Map<String, dynamic> json) => UserModel(
-        name: json['name'] as String,
-        email: json['email'] as String,
-        username: json['username'] as String,
-      ); //!< Map<String, dynamic> json) => UserModel(
+  factory UserModel.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
+  //  SnapshotOptions? options,
+  ) {
+    final data = snapshot!.data();
+    return UserModel(
+      name: data?['name'],
+      email: data?['email'],
+      username: data?['username'],
+    );
+  }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toFirestore() {
     return {
-      "name": name ?? 'Error sending name',
-      "email": email ?? 'Error sending email',
-      "username": username ?? 'Error sending username',
+      if (id != null) "id": id,
+      if (name != null) "name": name,
+      if (email != null) "email": email,
+      if (username != null) "username": username,
     };
   }
 }

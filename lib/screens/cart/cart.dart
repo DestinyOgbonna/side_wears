@@ -37,7 +37,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text('\$600.00', style: AppStyles.boldwhiteText),
+                      Text('\$600.00', style: AppStyles.boldgreyText),
                     ],
                   ),
                   Padding(

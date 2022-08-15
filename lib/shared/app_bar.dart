@@ -34,7 +34,7 @@ class MyAppBar extends ConsumerWidget {
       title: Center(
         child: Text(
           title!,
-          style: AppStyles.boldwhiteText,
+          style: AppStyles.boldgreyText,
         ),
       ),
       elevation: 0,

@@ -1,17 +1,21 @@
 import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetails extends ConsumerStatefulWidget {
   const ProductDetails({Key? key, this.productId}) : super(key: key);
   final String? productId;
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends ConsumerState<ProductDetails> {
-  int activeImagestate = 0;
+  @override
+  void initState() {
+    super.initState();
+    ref.read(myProductsDetailsScreenModel.notifier).getSingleProductDetails();
+  }
   final FirestoreCollectionService _firestoreCollectionService =
       FirestoreCollectionService();
   @override
@@ -32,7 +36,6 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
             if (snapshot.connectionState == ConnectionState.done) {
               Map<String, dynamic> data =
                   snapshot.data!.data() as Map<String, dynamic>;
-
               return SizedBox(
                 // margin: EdgeInsets.symmetric(horizontal: 15.0.h),
                 child: Column(
@@ -45,8 +48,6 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                             height: 370.0.h,
                             autoPlay: true,
                             viewportFraction: 1,
-                            // onPageChanged: (index, reason) =>
-                            //     setState(() => activeImagestate = index),
                           ),
                           itemCount: data['product_image'].length,
                           itemBuilder:
@@ -57,55 +58,57 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                         ),
                         Positioned(
                           top: 20.0.h,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    right: 48.0.w, left: 20.0.w),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Icon(
-                                    Icons.arrow_back,
-                                    color: AppColors.lightgreyColor,
-                                  ),
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(right: 48.0.w, left: 20.0.w),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: AppColors.whiteColor,
+                                radius: 18.0.r,
+                                child: const Icon(
+                                  Icons.arrow_back,
+                                  color: AppColors.darkColor,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 15.0.h,
-                    ),
-                    imageIndicator(),
-                    SizedBox(
                       height: 25.0.h,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${data['product_name']}',
-                            style: AppStyles.boldwhiteText),
-                        Text('\$${data['product_price']}',
-                            style: AppStyles.normalwhiteText),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${data['product_name']}',
+                              style: AppStyles.boldgreyText),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('\$${data['product_price']}',
+                              style: AppStyles.normalgreyText),
+                        ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 15.0.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('${data['product_description']}',
-                          style: AppStyles.mediumgreyText),
                     ),
                     SizedBox(
                       height: 10.0.h,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '${data['product_description']}',
+                        style: AppStyles.mediumgreyText,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
                     SizedBox(
-                      height: 15.0.h,
+                      height: 10.0.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -117,14 +120,14 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                       ],
                     ),
                     SizedBox(
-                      height: 15.0.h,
+                      height: 35.0.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Icon(
                           Icons.favorite_outline_outlined,
-                          size: 45.0.h,
+                          size: 35.0.h,
                           color: AppColors.lightgreyColor,
                         ),
                         InkWell(
@@ -138,7 +141,7 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                                     builder: (context) => const CartPage()));
                           },
                           child: CustomButton(
-                            width: 190.0.w,
+                            width: 230.0.w,
                             buttonText: 'Add to Cart',
                           ),
                         )
@@ -148,13 +151,12 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                 ),
               );
             }
-            return const Center(child: SizedBox(child: Text('No data')));
+            return const Center(
+              child: SizedBox(child: CircularProgressIndicator.adaptive()),
+            );
           },
         ),
       ),
     );
   }
-
-  imageIndicator() =>
-      AnimatedSmoothIndicator(activeIndex: activeImagestate, count: 3);
 }

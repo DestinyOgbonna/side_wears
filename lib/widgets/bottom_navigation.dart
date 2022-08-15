@@ -11,7 +11,7 @@ class Home extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<Home> {
   final List<Widget> _items = [
-    const HomeScreen(),
+     HomeScreen(),
     const FavouritePage(),
     const SearchView(),
     const SettingsPage(),
