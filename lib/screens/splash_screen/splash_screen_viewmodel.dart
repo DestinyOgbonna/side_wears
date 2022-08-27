@@ -9,13 +9,14 @@ class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
     switch (result) {
       case ConnectivityResult.mobile:
         Fluttertoast.showToast(
-            msg: 'Connected',
+            msg: 'Connected to mobile',
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.SNACKBAR,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
+          
         break;
       case ConnectivityResult.bluetooth:
         Fluttertoast.showToast(

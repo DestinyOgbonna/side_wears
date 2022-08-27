@@ -44,24 +44,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 SizedBox(
                   height: 20.0.h,
                 ),
-                Text('Enter Email Address', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter Email Address',
+                  labelText: 'Enter Email Address',
                   controller: emailController,
                   obscureText: false,
                 ),
                 SizedBox(
                   height: 20.0.h,
                 ),
-                Text('Enter Password', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter Password',
+                  labelText: 'Enter Password',
                   controller: passwordController,
                   obscureText: _isHidden,
                   suffixIcon: GestureDetector(
@@ -101,7 +93,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         style: AppStyles.smallgreyText,
                         children: [
                           TextSpan(
-                              text: 'Sign Up', style: AppStyles.mediumgreyText),
+                              text: 'Register',
+                              style: AppStyles.mediumgreyText),
                         ],
                       ),
                     ),

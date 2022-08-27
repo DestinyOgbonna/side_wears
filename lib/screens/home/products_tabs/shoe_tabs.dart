@@ -8,64 +8,61 @@ class ShoesTab extends ConsumerStatefulWidget {
 }
 
 class _ShoesTabState extends ConsumerState<ShoesTab> {
-   final FirestoreCollectionService _firestoreCollectionService =
-      FirestoreCollectionService();
+  @override
+  void initState() {
+    super.initState();
+    ref.read(myHomeScreenModel.notifier).getShoeProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return  FutureBuilder<QuerySnapshot>(
-                    future: _firestoreCollectionService.productsRef.get(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot?> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator.adaptive());
-                      }
-                      if (snapshot.connectionState == ConnectionState.none) {
-                        return const Center(child: Text('No data'));
-                      }
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return SizedBox(
-                          height: 250.0.h,
-                          child: ScrollConfiguration(
-                            behavior: RemoveScrollGlow(),
-                            child: GridView.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 3,
-                              controller:
-                                  ScrollController(keepScrollOffset: false),
-                              mainAxisSpacing: 3,
-                              semanticChildCount: 6,
-                              children: snapshot.data!.docs.map(
-                                (document) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProductDetails(
-                                            productId: document.id,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Sneakers(
-                                      prodImage: (document.data()
-                                          as dynamic)['product_image'][0],
-                                      prodName:
-                                          '${(document.data() as dynamic)['product_name']}',
-                                      prodPrice:
-                                          '\$${(document.data() as dynamic)['product_price']}',
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+    final state = ref.watch(myHomeScreenModel);
+    return 
+    
+    // state.loadingState == LoadingState.loading
+    //     ? const Center(child: CircularProgressIndicator())
+    //     : state.loadingState == LoadingState.error
+    //         ? const Center(
+    //             child: Text('Oops! Something went wrong'),
+    //           )
+    //         : 
+            
+            SizedBox(
+                height: 250.0.h,
+                child: ScrollConfiguration(
+                  behavior: RemoveScrollGlow(),
+                  child: GridView.builder(
+                    controller: ScrollController(keepScrollOffset: false),
+                    semanticChildCount: 6,
+                    itemCount: 4,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetails(
+                                productId: state.productModel.id,
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                      return const Center(child: Text('No data'));
+                          );
+                        },
+                        child: Sneakers(
+                          prodImage: '${state.productModel.productImages?[0]}',
+                          prodName: '${state.productModel.productName}',
+                          prodPrice: '${state.productModel.productPrice}',
+                        ),
+                      );
                     },
-                  );
+                  ),
+                ),
+              );
   }
 }

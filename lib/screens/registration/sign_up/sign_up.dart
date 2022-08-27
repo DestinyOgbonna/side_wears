@@ -17,7 +17,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   void initState() {
     super.initState();
     ref.read(mySplashScreenModel.notifier).checkInternetConnection();
-  
   }
 
   @override
@@ -54,48 +53,32 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 SizedBox(
                   height: 20.0.h,
                 ),
-                Text('Enter Email', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter Email Address',
+                  labelText: 'Enter Email Address',
                   controller: emailController,
                   obscureText: false,
                 ),
                 SizedBox(
                   height: 20.0.h,
                 ),
-                Text('Enter Name', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter Name',
+                  labelText: 'Enter Name',
                   controller: nameController,
                   obscureText: false,
                 ),
                 SizedBox(
                   height: 20.0.h,
                 ),
-                Text('Enter User Name', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter User Name',
+                  labelText: 'Enter User Name',
                   controller: userNameController,
                   obscureText: false,
                 ),
                 SizedBox(
                   height: 30.0.h,
                 ),
-                Text('Enter password', style: AppStyles.smallgreyText),
-                SizedBox(
-                  height: 10.0.h,
-                ),
                 CustomTextField(
-                  hintText: 'Enter Password',
+                  labelText: 'Enter Password',
                   controller: passwordController,
                   obscureText: _isHidden,
                   suffixIcon: GestureDetector(

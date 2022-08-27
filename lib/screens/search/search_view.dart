@@ -20,7 +20,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
               margin:
                   EdgeInsets.symmetric(horizontal: 15.0.h, vertical: 30.0.h),
               child: CustomTextField(
-                hintText: 'Search',
+              labelText: 'Search',
                 controller: searchController,
                 obscureText: false,
                 suffixIcon: const Icon(

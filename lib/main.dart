@@ -1,4 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/providers/theme.dart';
 
 import 'package:building_ui/themes/themes.dart';
 
@@ -18,11 +19,25 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  late AppThemeProvider _displayModeProvider;
   final appRouter = AppRouter();
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _displayModeProvider = AppThemeProvider();
+    _displayModeProvider.brightnessMode =
+        WidgetsBinding.instance.window.platformBrightness;
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    if (mounted) {
+      _displayModeProvider.brightnessMode =
+          WidgetsBinding.instance.window.platformBrightness;
+    }
+    super.didChangePlatformBrightness();
   }
 
   // This widget is the root of your application.
@@ -33,7 +48,16 @@ class _MyAppState extends ConsumerState<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp.router(
+        return
+            // refreshListenable.no(
+            //   value: _displayModeProvider,
+            //   child: Builder(
+            //     builder: (context) {
+            //       final Provider = ChangeNotifierProvider<AppThemeProvider>((ref) {
+            //         return AppThemeProvider();
+            //       });
+            //       return
+            MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
@@ -42,6 +66,10 @@ class _MyAppState extends ConsumerState<MyApp> {
           themeMode: ThemeMode.light,
         );
       },
+
+      ///),
     );
   }
+  //);
 }
+//}

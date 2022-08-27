@@ -35,7 +35,7 @@ class AddressPage extends ConsumerWidget {
                 SizedBox(
                   width: 330.0.w,
                   child: const CustomTextField(
-                    hintText: 'Home Adddress',
+                  labelText: 'Home Adddress',
                     obscureText: false,
                   ),
                 ),
@@ -65,14 +65,14 @@ class AddressPage extends ConsumerWidget {
                       SizedBox(
                         width: 155.0.w,
                         child: const CustomTextField(
-                          hintText: 'Enter State',
+                        labelText: 'Enter State',
                           obscureText: false,
                         ),
                       ),
                       SizedBox(
                         width: 155.0.w,
                         child: const CustomTextField(
-                          hintText: 'Enter City',
+                        labelText: 'Enter City',
                           obscureText: false,
                         ),
                       ),

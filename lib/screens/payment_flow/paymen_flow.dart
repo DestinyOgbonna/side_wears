@@ -51,7 +51,7 @@ class CardPayment extends ConsumerWidget {
                         SizedBox(
                           width: 270.0.w,
                           child: const CustomTextField(
-                            hintText: '**** **** **** 6643',
+                            labelText: '**** **** **** 6643',
                             obscureText: false,
                           ),
                         ),
@@ -84,14 +84,14 @@ class CardPayment extends ConsumerWidget {
                         SizedBox(
                           width: 150.0.w,
                           child: const CustomTextField(
-                            hintText: 'MM/YY',
+                            labelText: 'MM/YY',
                             obscureText: false,
                           ),
                         ),
                         SizedBox(
                           width: 150.0.w,
                           child: const CustomTextField(
-                            hintText: 'CVV',
+                            labelText: 'CVV',
                             obscureText: false,
                           ),
                         ),

@@ -5,19 +5,20 @@ class UserModel {
   String? name;
   String? email;
   String? username;
+  String? profileImage;
 
-  UserModel({this.name, this.email, this.username, this.id});
+  UserModel({this.name, this.email, this.username, this.id, this.profileImage});
 
   factory UserModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>>? snapshot,
-  //  SnapshotOptions? options,
+    //  SnapshotOptions? options,
   ) {
     final data = snapshot!.data();
     return UserModel(
-      name: data?['name'],
-      email: data?['email'],
-      username: data?['username'],
-    );
+        name: data?['name'],
+        email: data?['email'],
+        username: data?['username'],
+        profileImage: data?['profile_image']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -26,6 +27,7 @@ class UserModel {
       if (name != null) "name": name,
       if (email != null) "email": email,
       if (username != null) "username": username,
+      if (profileImage != null) "profile_image": profileImage,
     };
   }
 }

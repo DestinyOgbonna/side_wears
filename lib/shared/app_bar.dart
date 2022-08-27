@@ -44,7 +44,7 @@ class MyAppBar extends ConsumerWidget {
                 padding: EdgeInsets.only(right: 18.0.h),
                 child: Center(
                     child: Text(
-                  'Done',
+                  '',
                   style: AppStyles.mediumgreyText,
                 )),
               )

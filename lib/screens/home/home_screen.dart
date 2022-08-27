@@ -25,7 +25,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     service.showScheduledNotification();
 
     ref.read(myHomeScreenModel.notifier).getUsername();
-ref.read(myHomeScreenModel.notifier).getData();
+    ref.read(myHomeScreenModel.notifier).getShoeProducts();
   }
 
   @override
@@ -38,11 +38,14 @@ ref.read(myHomeScreenModel.notifier).getData();
   Widget build(BuildContext context) {
     final state = ref.watch(myHomeScreenModel);
     return Scaffold(
-      body: state.loadingState == LoadingState.loading
-          ? const Center(child: CircularProgressIndicator())
-          : state.loadingState == LoadingState.error
-              ? const Center(child: Text('Oops! Something went wrong'))
-              : Padding(
+      body:
+      // : state.loadingState == LoadingState.loading
+      //     ? const Center(child: CircularProgressIndicator())
+      //     : state.loadingState == LoadingState.error
+      //         ? const Center(child: Text('Oops! Something went wrong'))
+      //         :
+              
+               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SafeArea(
                     bottom: false,
@@ -140,7 +143,8 @@ ref.read(myHomeScreenModel.notifier).getData();
                             child: TabBarView(
                               controller: _tabController,
                               children: const [
-                                ShoesTab(),
+                               ShoesTab(),
+                              
                                 Center(
                                   child: Text(
                                     'Hoodies Coming Soon',

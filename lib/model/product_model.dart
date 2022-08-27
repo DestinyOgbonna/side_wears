@@ -4,7 +4,7 @@ class Product {
   final String? id;
   final String? productName;
   final String? productDescription;
-  final String? productPrice;
+  final num? productPrice;
   final List<String>? productImages;
 
   Product({
@@ -16,17 +16,15 @@ class Product {
   });
 
   factory Product.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    QuerySnapshot<Map<String, dynamic>> snapshot,
   ) {
-    final data = snapshot.data();
+    final data = snapshot.docs.map((doc) => doc.data()).toList();
     return Product(
-      id: data?['id'],
-      productName: data?['product_name'],
-      productPrice: data?['product_price'],
-      productDescription: data?['product_description'],
-      productImages: data?['product_image'] is Iterable
-          ? List.from(data?['product_image'])
-          : null,
+      id: snapshot.docs.first.id,
+      productName: snapshot.docs.first.data()['product_name'],
+      productDescription: snapshot.docs.first.data()['product_description'],
+      productPrice: snapshot.docs.first.data()['product_price'],
+      productImages:snapshot.docs.first.data()[0]['product_images'],
     );
   }
 

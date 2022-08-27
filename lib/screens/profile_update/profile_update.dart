@@ -18,12 +18,14 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
     nameController.dispose();
     userNameController.dispose();
     phoneController.dispose();
+    addressController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(myProfileScreenModel);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0.h),
@@ -44,30 +46,83 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
             ),
             Center(
               child: InkWell(
-                onTap: () {
-                  ref
-                      .read(myProfileScreenModel.notifier)
-                      .uploadProfileImageToFirebase();
-                },
-                child: CircleAvatar(
-                  backgroundColor: AppColors.lightgreyColor,
-                  minRadius: 40.0.r,
-                  maxRadius: 45.0.r,
-                  child: ref.read(myProfileScreenModel.notifier).image != null
-                      ? Image.network(
-                          ref
-                              .read(myProfileScreenModel.notifier)
-                              .image
-                              .toString(),
-                          fit: BoxFit.cover,
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Wrap(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                ref
+                                    .watch(myProfileScreenModel.notifier)
+                                    .uploadProfileImageFromCamera();
+                                context.router.pop();
+                              },
+                              child: const ListTile(
+                                leading: Icon(Icons.camera_alt_outlined),
+                                title: Text('Camera'),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                ref
+                                    .watch(myProfileScreenModel.notifier)
+                                    .uploadProfileImageFromGallery();
+                                context.router.pop();
+                              },
+                              child: const ListTile(
+                                leading: Icon(Icons.browse_gallery),
+                                title: Text('Gallery'),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: state.image != null
+                      ? Stack(
+                          children: [
+                            CircleAvatar(
+                                backgroundColor: AppColors.lightgreyColor,
+                                minRadius: 40.0.r,
+                                maxRadius: 45.0.r,
+                                backgroundImage: FileImage(
+                                  state.image!,
+                                )),
+                            Positioned(
+                                top: 60.0.h,
+                                left: 60.0.h,
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 20.0.h,
+                                  color: Colors.blue,
+                                )),
+                          ],
                         )
-                      : Icon(
-                          Icons.person,
-                          size: 40.0.r,
-                          color: AppColors.lightgreyColor,
-                        ),
-                ),
-              ),
+                      : Stack(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.lightgreyColor,
+                              minRadius: 40.0.r,
+                              maxRadius: 45.0.r,
+                              child: Icon(
+                                Icons.person,
+                                size: 40.0.r,
+                                color: AppColors.whiteColor,
+                              ),
+                            ),
+                            Positioned(
+                                top: 60.0.h,
+                                left: 60.0.h,
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 20.0.h,
+                                  color: Colors.blue,
+                                )),
+                          ],
+                        )),
             ),
             SizedBox(
               height: 10.0.h,
@@ -86,7 +141,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-              hintText: 'Enter Name',
+            labelText: 'Enter Name',
               controller: nameController,
               obscureText: false,
             ),
@@ -98,7 +153,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-              hintText: 'Enter Phone Number',
+            labelText: 'Enter Phone Number',
               controller: phoneController,
               obscureText: false,
             ),
@@ -110,7 +165,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-              hintText: 'User Name',
+            labelText: 'User Name',
               controller: userNameController,
               obscureText: false,
             ),
@@ -122,7 +177,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-              hintText: 'Enter Addresss',
+            labelText: 'Enter Addresss',
               controller: addressController,
               obscureText: false,
             ),

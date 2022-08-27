@@ -11,20 +11,21 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
-   late final LocalNotificationService service;
+  late final LocalNotificationService service;
   @override
   void initState() {
     super.initState();
     ref.read(mySplashScreenModel.notifier).checkInternetConnection();
     ref.read(mySignInViewmodel.notifier).saveUserLoginState(context);
     Timer(const Duration(milliseconds: 3000), () {
-      context.router.replaceAll(const [SignUpPageRoute()]);
+      if (!mounted) {
+        context.router.replaceAll(const [SignUpPageRoute()]);
+      }
 
-
-    service = LocalNotificationService();
-    service.initialize();
-    listenToNotification();
-    service.showScheduledNotification();
+      service = LocalNotificationService();
+      service.initialize();
+      listenToNotification();
+      service.showScheduledNotification();
     });
   }
 
@@ -61,7 +62,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       ),
     );
   }
-   void listenToNotification() {
+
+  void listenToNotification() {
     service.onNotificationClick.stream.listen(onNotificationListener);
   }
 

@@ -1,5 +1,3 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -11,8 +9,8 @@ class LocalNotificationService {
 
   //* creating a stream to listen to the payloads evemt
   final BehaviorSubject<String?> onNotificationClick = BehaviorSubject();
- //*Initializing the notification setting for the various device platforms//*Initializing the notification service and timezones
-  Future<void> initialize() async { 
+  //*Initializing the notification setting for the various device platforms//*Initializing the notification service and timezones
+  Future<void> initialize() async {
     tz.initializeTimeZones();
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@drawable/ic_stat_download');
@@ -59,22 +57,20 @@ class LocalNotificationService {
   }
   //*Function to showNotification after a set period of time
 
-  Future<void> showScheduledNotification({  String? payLoad}
-   
-  ) async {
+  Future<void> showScheduledNotification({String? payLoad}) async {
     final details = await _notificationDetails();
     await _localNotificationService.zonedSchedule(
         1,
-      'Welcome to Lord Wears',
+        'Welcome to Lord Wears',
         'Thanks for shopping with us',
         tz.TZDateTime.from(
             DateTime.now().add(const Duration(seconds: 4)), tz.local),
         details,
-        androidAllowWhileIdle: true, payload: payLoad,
+        androidAllowWhileIdle: true,
+        payload: payLoad,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
   }
-
 
 // Future<void> periodicallyShow(
 //   int id,

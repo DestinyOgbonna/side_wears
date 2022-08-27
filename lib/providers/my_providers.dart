@@ -1,6 +1,7 @@
 import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/providers/theme.dart';
 import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.dart';
-import 'package:building_ui/screens/profile_update/profile_update_viewmode;.dart';
+import 'package:building_ui/screens/profile_update/profile_update_viewmodel.dart';
 import 'package:building_ui/screens/settings/settings_viewmodel.dart';
 
 final mySignUpViewmodel =
@@ -12,10 +13,10 @@ final mySignInViewmodel =
         ((ref) => SignInViewModel(ref.read)));
 
 final myHomeScreenModel =
-    StateNotifierProvider.autoDispose<HomeScreenViewModel, HomeScreenState>(
+    StateNotifierProvider<HomeScreenViewModel, HomeScreenState>(
         ((ref) => HomeScreenViewModel()));
 final mySplashScreenModel =
-    StateNotifierProvider<SplashScreenViewModel, SplashScreenState>(
+    StateNotifierProvider.autoDispose<SplashScreenViewModel, SplashScreenState>(
         ((ref) => SplashScreenViewModel()));
 final myProfileScreenModel =
     StateNotifierProvider<ProfileViewModel, ProfileState>(
@@ -26,3 +27,5 @@ final mySettingsScreenModel =
 final myProductsDetailsScreenModel =
     StateNotifierProvider<ProductDetailsViewModel, ProductDetailsViewState>(
         ((ref) => ProductDetailsViewModel()));
+
+        final themingProvider = ChangeNotifierProvider<AppThemeProvider>((ref) => AppThemeProvider());

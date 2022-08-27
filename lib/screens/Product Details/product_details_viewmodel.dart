@@ -13,9 +13,9 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
       final getProduct = _firestoreCollectionService.productsRef
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
-     
+
       final productsModel = Product(
-        productPrice: "product_price",
+        productPrice: 500,
         productName: "product_name",
         productImages: ["product_image"],
       );
