@@ -23,9 +23,7 @@ class Product {
       productName: snapshot.data()['product_name'],
       productDescription: snapshot.data()['product_description'],
       productPrice: snapshot.data()['product_price'],
-      productImages: snapshot.data()['product_images'] == null
-          ? null
-          : snapshot.data()['product_images'][0],
+      productImages: snapshot.data()['product_images'],
     );
   }
 
