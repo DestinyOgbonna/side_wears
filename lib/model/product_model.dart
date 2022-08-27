@@ -16,15 +16,16 @@ class Product {
   });
 
   factory Product.fromFirestore(
-    QuerySnapshot<Map<String, dynamic>> snapshot,
+    QueryDocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
-    final data = snapshot.docs.map((doc) => doc.data()).toList();
     return Product(
-      id: snapshot.docs.first.id,
-      productName: snapshot.docs.first.data()['product_name'],
-      productDescription: snapshot.docs.first.data()['product_description'],
-      productPrice: snapshot.docs.first.data()['product_price'],
-      productImages:snapshot.docs.first.data()[0]['product_images'],
+      id: snapshot.id,
+      productName: snapshot.data()['product_name'],
+      productDescription: snapshot.data()['product_description'],
+      productPrice: snapshot.data()['product_price'],
+      productImages: snapshot.data()['product_images'] == null
+          ? null
+          : snapshot.data()['product_images'][0],
     );
   }
 

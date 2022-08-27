@@ -61,6 +61,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         //   loadingState: LoadingState.success,
         //   productModel: product,
         // );
+         print('!!!!!!!!!! $product !!!!!!!!!!!!');
         return product;
       } else {
         print('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
