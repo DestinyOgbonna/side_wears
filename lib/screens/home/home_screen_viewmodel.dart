@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/model/product_model.dart';
 
@@ -40,7 +42,8 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
 
 //********************     Getting Shoe Products Fromt the DB  ***********************
 
-  Future getShoeProducts() async {
+  Future<List<Product>> getShoeProducts() async {
+    List<Product> products = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
           await _firestoreCollectionService.productsRef.get()
@@ -50,26 +53,30 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         //   loadingState: LoadingState.loading,
         // );
 
-        print('!!!!!!!!!! $getProducts !!!!!!!!!!!!');
-        List shoes = getProducts.docs.toList();
-        final product = shoes
-            .map((e) => Product.fromFirestore(
-                  e,
-                ))
-            .toList();
+        log('!!!!!!!!!! $getProducts !!!!!!!!!!!!');
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
+            getProducts.docs;
+
+        log('message ${shoes.first.id}');
+        log('message ${shoes.first.data()['product_name']}');
+        log('product_description ${shoes.first.data()['product_description']}');
+        log('product_images ${shoes.first.data()['product_images']}');
+        final product =
+            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
         // state = state.copyWith(
         //   loadingState: LoadingState.success,
         //   productModel: product,
         // );
-        return product;
+        products = product;
       } else {
-        print('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
+        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
     } catch (e) {
       state = state.copyWith(
         loadingState: LoadingState.error,
       );
     }
+    return products;
   }
 }
 
