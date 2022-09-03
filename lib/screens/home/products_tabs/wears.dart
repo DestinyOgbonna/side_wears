@@ -1,30 +1,25 @@
 import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/model/product_model.dart';
 
-class ShoesTab extends ConsumerStatefulWidget {
-  const ShoesTab({Key? key}) : super(key: key);
+class WearsTab extends ConsumerStatefulWidget {
+  const WearsTab({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ShoesTabState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _WearsTabState();
 }
 
-class _ShoesTabState extends ConsumerState<ShoesTab> {
+class _WearsTabState extends ConsumerState<WearsTab> {
   @override
   void initState() {
     super.initState();
-    ref.read(myHomeScreenModel.notifier).getShoeProducts();
+    ref.read(myHomeScreenModel.notifier).getWearsProducts();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Product>>(
       future: ref.read(myHomeScreenModel.notifier).getShoeProducts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        }
+      builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const Center(

@@ -10,24 +10,25 @@ class SettingsViewModel extends StateNotifier<SettingsViewState> {
   final Reader _readServices;
   final FirestoreCollectionService _firestoreCollectionService =
       FirestoreCollectionService();
-
-  Future getUsername() async {
+      
+ Future<UserModel?> getUsername() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.usersRef
               .doc(FirebaseAuth.instance.currentUser!.uid)
               .get() as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
-        state = state.copyWith(loadingState: LoadingState.loading);
-        final loggedInUsername = UserModel.fromFirestore(getUser);
-        state = state.copyWith(
-            loadingState: LoadingState.success, userModel: loggedInUsername);
-        return loggedInUsername;
+        DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
+        final loggedInUsername =
+            UserModel.fromFirestore(getLoggedInUserName);
+       return  loggedInUsername;
       }
     } catch (e) {
-      print(e);
-      state = state.copyWith(loadingState: LoadingState.error);
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
     }
+    return null;
   }
 
   bool? isNewUser;

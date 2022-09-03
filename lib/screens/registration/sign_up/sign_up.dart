@@ -12,7 +12,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _isHidden = true;
+  final bool _isHidden = true;
+
   @override
   void initState() {
     super.initState();
@@ -80,12 +81,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 CustomTextField(
                   labelText: 'Enter Password',
                   controller: passwordController,
-                  obscureText: _isHidden,
+                  obscureText: state.isSelected,
                   suffixIcon: GestureDetector(
-                    onTap: _togglePasswordView,
+                    onTap: () {
+                      ref.read(mySignUpViewmodel.notifier).obscurePassword();
+                    },
                     child: Icon(
-                      _isHidden ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.whiteColor, // Add this line
+                      state.isSelected
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.lightgreyColor, // Add this line
                     ),
                   ),
                 ),
@@ -95,6 +100,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 Center(
                   child: InkWell(
                     onTap: () {
+                      ref.read(mySignUpViewmodel.notifier).showProgressBar();
                       ref.read(mySignUpViewmodel.notifier).signUpUser(
                           emailController,
                           passwordController,
@@ -102,8 +108,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           userNameController,
                           context);
                     },
-                    child: const CustomButton(
-                        buttonText: 'Submit', width: double.infinity),
+                    child: state.isProgress != true
+                        ? const CustomButton(
+                            buttonText: 'Submit', width: double.infinity)
+                        : const CircularProgressIndicator.adaptive(),
                   ),
                 ),
                 SizedBox(
@@ -128,8 +136,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   height: 20.0.h,
                 ),
                 Center(
-                  child: Text('Sign Up with on of the following options.',
-                      style: AppStyles.mediumgreyText),
+                  child: Text('Sign Up with one of the following options.',
+                      style: AppStyles.smallgreyText),
                 ),
                 SizedBox(
                   height: 10.0.h,
@@ -148,11 +156,5 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         ),
       ),
     );
-  }
-
-  void _togglePasswordView() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
   }
 }

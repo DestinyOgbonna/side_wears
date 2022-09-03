@@ -8,8 +8,79 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
 
   final picker = ImagePicker();
   final storage = FileStorage();
-  late String imagepath;
-  late String imagename;
+  // late String imagepath;
+  // late String imagename;
+  // String? getUserImage;
+
+ showProgressBar() {
+    state = state.copyWith(isProgress: !state.isProgress);
+  }
+
+
+//* UPLOAD IMAGE FROM Gallary FUNCTION
+  Future<void> uploadProfileImageFromGallery() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        state = state.copyWith(loadingState: LoadingState.loading);
+        final imageGallery = File(pickedFile.path);
+        state = state.copyWith(
+            loadingState: LoadingState.success, image: imageGallery);
+        state.copyWith(imagename: pickedFile.name);
+        state.copyWith(imagepath: pickedFile.path);
+      }
+    } on PlatformException catch (e) {
+      Fluttertoast.showToast(
+          msg: '$e',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.SNACKBAR,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      state = state.copyWith(loadingState: LoadingState.error);
+    }
+  }
+
+//* UPLOAD IMAGE TO FIRESTORE FUNCTION
+  Future<void> uploadToFireStore() async {
+    //storage.uploadFiles(imagepath, imagename);
+    File file = File(state.imagepath!);
+
+    final ref =
+        storage.firebaseStorage.ref().child('User_Images/${state.imagepath}');
+    final uploadData = ref.putFile(file);
+    final dataSnapshot = await uploadData.whenComplete(() => {});
+    final getProfileUrl = await dataSnapshot.ref.getDownloadURL();
+    state.getUserImage = getProfileUrl;
+  }
+
+  //* GET DOWNLOAD URL OF THE APPLICATION
+
+//* UPLOAD IMAGE FROM CAMERA FUNCTION
+  uploadProfileImageFromCamera() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        final imageCamera = File(pickedFile.path);
+        state = state.copyWith(
+            loadingState: LoadingState.success, image: imageCamera);
+
+        state.copyWith(imagename: pickedFile.name);
+        state.copyWith(imagepath: pickedFile.path);
+      }
+    } on PlatformException catch (e) {
+      Fluttertoast.showToast(
+          msg: '$e',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.SNACKBAR,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      state = state.copyWith(loadingState: LoadingState.error);
+    }
+  }
 
   Future<void> updateUserDetails(
       TextEditingController phoneController,
@@ -39,6 +110,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
           'username': userNameController.text.toString().trim(),
           'name': nameController.text.toString().trim(),
           'address': addressController.text.toString().trim(),
+          'user_image': state.getUserImage.toString()
         }).then((value) {
           uploadToFireStore();
           Fluttertoast.showToast(
@@ -49,6 +121,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
+
           context.router.pop();
         }).catchError((err) {
           Fluttertoast.showToast(
@@ -84,74 +157,41 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
       }
     }
   }
-
-//* UPLOAD IMAGE FROM Gallary FUNCTION
-  Future<void> uploadProfileImageFromGallery() async {
-    try {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        state = state.copyWith(loadingState: LoadingState.loading);
-        final imageGallery = File(pickedFile.path);
-        state = state.copyWith(
-            loadingState: LoadingState.success, image: imageGallery);
-        imagepath = pickedFile.path;
-        imagename = pickedFile.name;
-      }
-    } on PlatformException catch (e) {
-      Fluttertoast.showToast(
-          msg: '$e',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.SNACKBAR,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      state = state.copyWith(loadingState: LoadingState.error);
-    }
-  }
-
-//* UPLOAD IMAGE TO FIRESTORE FUNCTION
-  Future<void> uploadToFireStore() async {
-    storage.uploadFiles(imagepath, imagename);
-  }
-
-//* UPLOAD IMAGE FROM CAMERA FUNCTION
-  uploadProfileImageFromCamera() async {
-    try {
-      final pickedFile = await picker.pickImage(source: ImageSource.camera);
-      if (pickedFile != null) {
-        final imageCamera = File(pickedFile.path);
-        state = state.copyWith(
-            loadingState: LoadingState.success, image: imageCamera);
-        imagepath = pickedFile.path;
-        imagename = pickedFile.name;
-      }
-    } on PlatformException catch (e) {
-      Fluttertoast.showToast(
-          msg: '$e',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.SNACKBAR,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      state = state.copyWith(loadingState: LoadingState.error);
-    }
-  }
 }
 
 class ProfileState {
   File? image;
+  String? imagepath;
+  String? imagename;
+  String? getUserImage;
   LoadingState loadingState;
-  ProfileState({this.loadingState = LoadingState.loading, this.image});
+  bool isProgress;
+  String? getImageUrl;
+  ProfileState(
+      {this.loadingState = LoadingState.loading,
+      this.image,
+      this.getImageUrl,
+      this.getUserImage,
+      this.isProgress = false,
+      this.imagename,
+      this.imagepath});
 
   ProfileState copyWith({
     LoadingState? loadingState,
+    String? getImageUrl,
+    String? imagepath,
+    bool? isProgress,
+    String? imagename,
+    String? getUserImage,
     File? image,
   }) {
     return ProfileState(
-      loadingState: loadingState ?? this.loadingState,
-      image: image ?? this.image,
-    );
+        loadingState: loadingState ?? this.loadingState,
+        image: image ?? this.image,
+        isProgress: isProgress ?? this.isProgress,
+        getImageUrl: getImageUrl ?? this.getImageUrl,
+        imagename: imagename ?? this.imagepath,
+        imagepath: imagepath ?? this.imagepath,
+        getUserImage: getUserImage ?? this.getUserImage);
   }
 }

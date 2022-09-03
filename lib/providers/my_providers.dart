@@ -19,7 +19,7 @@ final mySplashScreenModel =
     StateNotifierProvider.autoDispose<SplashScreenViewModel, SplashScreenState>(
         ((ref) => SplashScreenViewModel()));
 final myProfileScreenModel =
-    StateNotifierProvider<ProfileViewModel, ProfileState>(
+    StateNotifierProvider.autoDispose<ProfileViewModel, ProfileState>(
         ((ref) => ProfileViewModel()));
 final mySettingsScreenModel =
     StateNotifierProvider<SettingsViewModel, SettingsViewState>(

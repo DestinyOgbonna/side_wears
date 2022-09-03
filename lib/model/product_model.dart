@@ -5,7 +5,7 @@ class Product {
   final String? productName;
   final String? productDescription;
   final num? productPrice;
-  final List<String>? productImages;
+  final List? productImages;
 
   Product({
     this.id,
@@ -16,14 +16,14 @@ class Product {
   });
 
   factory Product.fromFirestore(
-    QueryDocumentSnapshot<Map<String, dynamic>> snapshot,
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
     return Product(
       id: snapshot.id,
-      productName: snapshot.data()['product_name'],
-      productDescription: snapshot.data()['product_description'],
-      productPrice: snapshot.data()['product_price'],
-      productImages: snapshot.data()['product_images'],
+      productName: snapshot.data()!['product_name'],
+      productDescription: snapshot.data()!['product_description'],
+      productPrice: snapshot.data()!['product_price'],
+      productImages: snapshot.data()!['product_image'],
     );
   }
 

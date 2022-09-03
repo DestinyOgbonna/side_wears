@@ -8,12 +8,15 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
 
   final Reader _readServices;
   bool? isNewUser;
-  bool _isObscured = false;
-  bool get isObscured => _isObscured;
 
-  void obscureOrShowPassword() {
-    _isObscured =! _isObscured;
+  obscurePassword() {
+    state = state.copyWith(isSelected: !state.isSelected);
   }
+
+  showProgressBar() {
+    state = state.copyWith(isProgress: !state.isProgress);
+  }
+
   void saveUserLoginState(BuildContext context) async {
     isNewUser = await _readServices(prefProvider).getBool('login') ?? false;
 
@@ -36,12 +39,12 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
       state = state.copyWith(loadingState: LoadingState.error);
       context.router.push(const SignInPageRoute());
     } else {
-      final signUser =_readServices(firebaseProvider)
+      final signUser = _readServices(firebaseProvider)
           .signInWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((value) async {
-        state = state.copyWith(loadingState: LoadingState.loading);
+        Future.delayed(const Duration(seconds: 10));
         Fluttertoast.showToast(
             msg: "Login Successful",
             toastLength: Toast.LENGTH_LONG,
@@ -50,10 +53,10 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
-        state = state.copyWith(loadingState: LoadingState.success);
-
+        state = state.copyWith(
+          loadingState: LoadingState.success,
+        );
         await _readServices(prefProvider).setBool('login', true);
-
         context.router.replaceAll([const HomeRoute()]);
       }).catchError((err) {
         Fluttertoast.showToast(
@@ -74,13 +77,22 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
 
 class SignInViewState {
   LoadingState loadingState;
-  SignInViewState({this.loadingState = LoadingState.loading});
+  bool isSelected;
+  bool isProgress;
+  SignInViewState(
+      {this.loadingState = LoadingState.loading,
+      this.isSelected = true,
+      this.isProgress = false});
 
   SignInViewState copyWith({
     LoadingState? loadingState,
+    bool? isSelected,
+    bool? isProgress,
   }) {
     return SignInViewState(
       loadingState: loadingState ?? this.loadingState,
+      isSelected: isSelected ?? this.isSelected,
+      isProgress: isProgress ?? this.isProgress,
     );
   }
 }

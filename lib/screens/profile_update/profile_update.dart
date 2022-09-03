@@ -141,7 +141,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-            labelText: 'Enter Name',
+              labelText: 'Enter Name',
               controller: nameController,
               obscureText: false,
             ),
@@ -153,7 +153,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-            labelText: 'Enter Phone Number',
+              labelText: 'Enter Phone Number',
               controller: phoneController,
               obscureText: false,
             ),
@@ -165,7 +165,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-            labelText: 'User Name',
+              labelText: 'User Name',
               controller: userNameController,
               obscureText: false,
             ),
@@ -177,7 +177,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
               height: 10.0.h,
             ),
             CustomTextField(
-            labelText: 'Enter Addresss',
+              labelText: 'Enter Addresss',
               controller: addressController,
               obscureText: false,
             ),
@@ -187,6 +187,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
             Center(
                 child: InkWell(
                     onTap: () {
+                      ref.read(myProfileScreenModel.notifier).showProgressBar();
                       ref.read(myProfileScreenModel.notifier).updateUserDetails(
                           phoneController,
                           nameController,
@@ -194,7 +195,9 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
                           addressController,
                           context);
                     },
-                    child: CustomButton(buttonText: 'Submit', width: 150.0.w)))
+                    child: state.isProgress != true
+                        ? CustomButton(buttonText: 'Submit', width: 150.0.w)
+                        : const CircularProgressIndicator.adaptive()))
           ]),
         ),
       ),

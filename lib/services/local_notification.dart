@@ -120,11 +120,11 @@ class LocalNotificationService {
 
   void _onDidReciveLocalNotification(
       int id, String? title, String? body, String? payLoad) {
-    print('id $id');
+    
   }
 
   void onSelectedNotification(String? payload) {
-    print(payload);
+  
 
     if (payload != null && payload.isNotEmpty) {
       onNotificationClick.add(payload);

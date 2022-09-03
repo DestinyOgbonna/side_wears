@@ -2,9 +2,17 @@ import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/services/firebase.dart';
 
 class SignUpViewModel extends StateNotifier<SignUpViewState> {
-  SignUpViewModel(this._readServices) : super(SignUpViewState(userModel: UserModel()));
+  SignUpViewModel(this._readServices)
+      : super(SignUpViewState(userModel: UserModel()));
 
   final Reader _readServices;
+
+  obscurePassword() {
+    state = state.copyWith(isSelected: !state.isSelected);
+  }
+ showProgressBar() {
+    state = state.copyWith(isProgress: !state.isProgress);
+  }
   Future signUpUser(
       TextEditingController emailController,
       TextEditingController passwordController,
@@ -28,33 +36,33 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
     } else {
       try {
         final signUpUser = _readServices(firebaseProvider)
-          .createNewUser(
-                  email: emailController.text.toString().trim(),
-                  password: passwordController.text.toString().trim())
-              .then((value) {
-            Fluttertoast.showToast(
-                msg: "Sign Up Successful",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.SNACKBAR,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 16.0);
-            addUserData(emailController, nameController, userNameController);
+            .createNewUser(
+                email: emailController.text.toString().trim(),
+                password: passwordController.text.toString().trim())
+            .then((value) {
+          Fluttertoast.showToast(
+              msg: "Sign Up Successful",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          addUserData(emailController, nameController, userNameController);
 
-            context.router.replaceAll(const [SignInPageRoute()]);
-            state = state.copyWith(loadingState: LoadingState.success);
-          }).catchError((err) {
-            Fluttertoast.showToast(
-                msg: err.message,
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.SNACKBAR,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
-            state = state.copyWith(loadingState: LoadingState.error);
-          });
+          context.router.replaceAll(const [SignInPageRoute()]);
+          state = state.copyWith(loadingState: LoadingState.success);
+        }).catchError((err) {
+          Fluttertoast.showToast(
+              msg: err.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          state = state.copyWith(loadingState: LoadingState.error);
+        });
         return signUpUser;
       } on FirebaseAuthException catch (e) {
         Fluttertoast.showToast(
@@ -113,14 +121,23 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
 class SignUpViewState {
   LoadingState loadingState;
   UserModel? userModel;
-
-  SignUpViewState({this.loadingState = LoadingState.loading, this.userModel});
+  bool isSelected;
+  bool isProgress;
+  SignUpViewState(
+      {this.loadingState = LoadingState.loading,
+      this.userModel,this.isProgress = false,
+      this.isSelected = true});
 
   SignUpViewState copyWith({
     LoadingState? loadingState,
+    UserModel? userModel,
+    bool? isSelected,
+    bool? isProgress,
   }) {
     return SignUpViewState(
+        isSelected: isSelected ?? this.isSelected,
         loadingState: loadingState ?? this.loadingState,
-        userModel: userModel ?? userModel);
+        userModel: userModel ?? userModel, isProgress: isProgress ?? this.isProgress,);
+        
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:building_ui/exports/exports.dart';
 
 class PaymentTile extends StatefulWidget {
@@ -18,11 +17,7 @@ class _PaymentTileState extends State<PaymentTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isTapped = true != false;
-        });
-      },
+      onTap: isSet,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         height: 60,
@@ -50,5 +45,11 @@ class _PaymentTileState extends State<PaymentTile> {
             leading: Image.asset(widget.image)),
       ),
     );
+  }
+
+  void isSet() {
+    setState(() {
+      isTapped = !isTapped;
+    });
   }
 }

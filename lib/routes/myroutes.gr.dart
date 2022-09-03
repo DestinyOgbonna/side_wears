@@ -40,6 +40,14 @@ class AppRouter extends _i3.RootStackRouter {
     ProductDetailsRoute.name: (routeData) {
       return _i3.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i2.ProductDetails());
+    },
+    CartPageRoute.name: (routeData) {
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.CartPage());
+    },
+    ProfileUpdateRoute.name: (routeData) {
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.ProfileUpdate());
     }
   };
 
@@ -49,7 +57,9 @@ class AppRouter extends _i3.RootStackRouter {
         _i3.RouteConfig(SignUpPageRoute.name, path: '/sign_up'),
         _i3.RouteConfig(SignInPageRoute.name, path: '/sign_in'),
         _i3.RouteConfig(HomeRoute.name, path: '/home'),
-        _i3.RouteConfig(ProductDetailsRoute.name, path: '/product_details')
+        _i3.RouteConfig(ProductDetailsRoute.name, path: '/product_details'),
+        _i3.RouteConfig(CartPageRoute.name, path: '/cart'),
+        _i3.RouteConfig(ProfileUpdateRoute.name, path: '/profile')
       ];
 }
 
@@ -92,4 +102,20 @@ class ProductDetailsRoute extends _i3.PageRouteInfo<void> {
       : super(ProductDetailsRoute.name, path: '/product_details');
 
   static const String name = 'ProductDetailsRoute';
+}
+
+/// generated route for
+/// [_i2.CartPage]
+class CartPageRoute extends _i3.PageRouteInfo<void> {
+  const CartPageRoute() : super(CartPageRoute.name, path: '/cart');
+
+  static const String name = 'CartPageRoute';
+}
+
+/// generated route for
+/// [_i2.ProfileUpdate]
+class ProfileUpdateRoute extends _i3.PageRouteInfo<void> {
+  const ProfileUpdateRoute() : super(ProfileUpdateRoute.name, path: '/profile');
+
+  static const String name = 'ProfileUpdateRoute';
 }

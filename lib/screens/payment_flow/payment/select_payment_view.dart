@@ -1,7 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
 
-
-
 class PaymentView extends ConsumerStatefulWidget {
   const PaymentView({Key? key}) : super(key: key);
 
@@ -13,7 +11,6 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: MyAppBar(
@@ -31,11 +28,11 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
                 height: 30.h,
               ),
               const PaymentTile(
-                type: 'Paypal',
+                type: 'PayStack',
                 image: 'assets/icons/paypal.png',
               ),
               const PaymentTile(
-                type: 'Credit card',
+                type: 'FLutterwave',
                 image: 'assets/icons/master.png',
               ),
               const PaymentTile(
@@ -60,10 +57,10 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.5), //color of shadow
+                      color: Colors.black.withOpacity(0.1), //color of shadow
                       spreadRadius: 3, //spread radius
-                      blurRadius: 9, // blur radius
-                      offset: const Offset(0, 2),
+                      blurRadius: 1, // blur radius
+                      offset: const Offset(0, 1),
                     ),
                     //you can set more BoxShadow() here
                   ],

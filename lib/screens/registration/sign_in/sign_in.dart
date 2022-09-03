@@ -10,7 +10,6 @@ class SignInPage extends ConsumerStatefulWidget {
 class _SignInPageState extends ConsumerState<SignInPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _isHidden = true;
 
   @override
   void dispose() {
@@ -55,12 +54,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 CustomTextField(
                   labelText: 'Enter Password',
                   controller: passwordController,
-                  obscureText: _isHidden,
+                  obscureText: state.isSelected,
                   suffixIcon: GestureDetector(
-                    onTap: _togglePasswordView,
+                    onTap: () {
+                      ref.read(mySignInViewmodel.notifier).obscurePassword();
+                    },
                     child: Icon(
-                      _isHidden ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.whiteColor, // Add this line
+                      state.isSelected
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.lightgreyColor, // Add this line
                     ),
                   ),
                 ),
@@ -70,14 +73,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      // state.loadingState == LoadingState.loading
-                      //     ? const CircularProgressIndicator.adaptive()
-                      //     :
+                      ref.read(mySignInViewmodel.notifier).showProgressBar();
                       ref.read(mySignInViewmodel.notifier).signUserIntoApp(
                           emailController, passwordController, context);
                     },
-                    child: const CustomButton(
-                        buttonText: 'Submit', width: double.infinity),
+                    child: state.isProgress != true
+                        ? const CustomButton(
+                            buttonText: 'Submit', width: double.infinity)
+                        : const CircularProgressIndicator.adaptive(),
                   ),
                 ),
                 SizedBox(
@@ -124,11 +127,5 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         ),
       ),
     );
-  }
-
-  void _togglePasswordView() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
   }
 }

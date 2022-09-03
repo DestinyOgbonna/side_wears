@@ -1,89 +1,74 @@
+import 'dart:developer';
+
 import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/model/product_model.dart';
 
 class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
-  ProductDetailsViewModel() : super(ProductDetailsViewState());
+  ProductDetailsViewModel()
+      : super(ProductDetailsViewState(productModel: Product()));
   final FirestoreCollectionService _firestoreCollectionService =
       FirestoreCollectionService();
 
-  String? productId;
+  String? prodID;
 
-  addtoCart() async {
-    try {
-      final getProduct = _firestoreCollectionService.productsRef
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-
-      final productsModel = Product(
-        productPrice: 500,
-        productName: "product_name",
-        productImages: ["product_image"],
-      );
-      final docRef = _firestoreCollectionService.cartRef
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('Cart')
-          .doc('CVRm2aTwusFvTKAa2EXF');
-      await docRef
-          .set(
-            productsModel.toFirestore(),
-          )
-          .then(
-            (value) => Fluttertoast.showToast(
-              msg: "Added to cart",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.SNACKBAR,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            ),
-          )
-          .catchError((err) {
-        Fluttertoast.showToast(
-            msg: err.message,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.SNACKBAR,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        //  state = state.copyWith(loadingState: LoadingState.error);
-      });
-      return addtoCart;
-    } on FirebaseException catch (e) {
-      Fluttertoast.showToast(
-          msg: '${e.message}',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.SNACKBAR,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      //  state = state.copyWith(loadingState: LoadingState.error);
-    }
+  productId(String? selectedprodID) {
+    prodID = selectedprodID;
   }
 
-  Future<Product?> getSingleProductDetails() async {
+  addtoCart() async {
+    final docRef = _firestoreCollectionService.usersRef
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('dart')
+        .doc('$prodID')
+        .set({});
+
+    log(' !!!!!!!!!!! PRODUCT DETAILS $docRef');
+  }
+
+  Future getProducts() async {
     try {
-      final prodref = _firestoreCollectionService.cartRef
-          .doc('CVRm2aTwusFvTKAa2EXF')
-          .get()
-          .then((DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        print('!!!!!!!!!!! $data!!!!!!!!!!!!!!!');
-      });
-      print('!!!!!!!!!!! $prodref!!!!!!!!!!!!!!!');
-    } catch (e) {}
-    return null;
+      final DocumentSnapshot<Map<String, dynamic>> getUser =
+          await _firestoreCollectionService.productsRef.doc(prodID).get()
+              as DocumentSnapshot<Map<String, dynamic>>;
+      if (getUser.exists) {
+        state = state.copyWith(
+          loadingState: LoadingState.loading,
+        );
+        final loggedInUsername = Product.fromFirestore(getUser);
+        state = state.copyWith(
+          loadingState: LoadingState.success,
+          productModel: loggedInUsername,
+        );
+        return loggedInUsername;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
   }
 }
 
 class ProductDetailsViewState {
   final String? productId;
+  LoadingState loadingState;
+  Product productModel;
 
-  ProductDetailsViewState({this.productId = ''});
+  ProductDetailsViewState({
+    this.productId = '',
+    this.loadingState = LoadingState.loading,
+    required this.productModel,
+  });
 
-  ProductDetailsViewState copyWith({String? productId}) {
-    return ProductDetailsViewState(productId: productId ?? this.productId);
+  ProductDetailsViewState copyWith({
+    String? productId,
+    Product? productModel,
+    LoadingState? loadingState,
+  }) {
+    return ProductDetailsViewState(
+      productId: productId ?? this.productId,
+      productModel: productModel ?? this.productModel,
+      loadingState: loadingState ?? this.loadingState,
+    );
   }
 }

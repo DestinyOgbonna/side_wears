@@ -16,28 +16,24 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
 
   //**************************    Getting the user name of the logged in user   ***************
 
-  Future getUsername() async {
+  Future<UserModel?> getUsername() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.usersRef
               .doc(FirebaseAuth.instance.currentUser!.uid)
               .get() as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
-        state = state.copyWith(
-          loadingState: LoadingState.loading,
-        );
-        final loggedInUsername = UserModel.fromFirestore(getUser);
-        state = state.copyWith(
-          loadingState: LoadingState.success,
-          userModel: loggedInUsername,
-        );
-        return loggedInUsername;
+        DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
+        final loggedInUsername =
+            UserModel.fromFirestore(getLoggedInUserName);
+       return  loggedInUsername;
       }
     } catch (e) {
       state = state.copyWith(
         loadingState: LoadingState.error,
       );
     }
+    return null;
   }
 
 //********************     Getting Shoe Products Fromt the DB  ***********************
@@ -49,26 +45,83 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
           await _firestoreCollectionService.productsRef.get()
               as QuerySnapshot<Map<String, dynamic>>;
       if (getProducts.docs.isNotEmpty) {
-        // state = state.copyWith(
-        //   loadingState: LoadingState.loading,
-        // );
-
-        log('!!!!!!!!!! $getProducts !!!!!!!!!!!!');
         List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
             getProducts.docs;
-
-        log('message ${shoes.first.id}');
-        log('message ${shoes.first.data()['product_name']}');
-        log('product_description ${shoes.first.data()['product_description']}');
-        log('product_images ${shoes.first.data()['product_images']}');
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        // state = state.copyWith(
-        //   loadingState: LoadingState.success,
-        //   productModel: product,
-        // );
         products = product;
+      } else {
+        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
+    return products;
+  }
 
+  //********************     Getting Hoodies Products Fromt the DB  ***********************
+  Future<List<Product>> getHoodiesProducts() async {
+    List<Product> products = [];
+    try {
+      final QuerySnapshot<Map<String, dynamic>> getProducts =
+          await _firestoreCollectionService.productsRef.get()
+              as QuerySnapshot<Map<String, dynamic>>;
+      if (getProducts.docs.isNotEmpty) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
+            getProducts.docs;
+        final product =
+            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
+        products = product;
+      } else {
+        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
+    return products;
+  }
+
+  //********************     Getting Hoodies Products Fromt the DB  ***********************
+  Future<List<Product>> getWearsProducts() async {
+    List<Product> products = [];
+    try {
+      final QuerySnapshot<Map<String, dynamic>> getProducts =
+          await _firestoreCollectionService.productsRef.get()
+              as QuerySnapshot<Map<String, dynamic>>;
+      if (getProducts.docs.isNotEmpty) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
+            getProducts.docs;
+        final product =
+            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
+        products = product;
+      } else {
+        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
+    return products;
+  }
+
+  //********************     Getting Watches Products Fromt the DB  ***********************
+  Future<List<Product>> getWatchesProducts() async {
+    List<Product> products = [];
+    try {
+      final QuerySnapshot<Map<String, dynamic>> getProducts =
+          await _firestoreCollectionService.productsRef.get()
+              as QuerySnapshot<Map<String, dynamic>>;
+      if (getProducts.docs.isNotEmpty) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
+            getProducts.docs;
+        final product =
+            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
+        products = product;
       } else {
         log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
