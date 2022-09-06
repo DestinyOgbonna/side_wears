@@ -4,15 +4,14 @@ import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/model/product_model.dart';
 
 class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
-  HomeScreenViewModel()
+  HomeScreenViewModel(this._firestoreCollectionService)
       : super(
           HomeScreenState(
             userModel: UserModel(),
             productModel: Product(),
           ),
         );
-  final FirestoreCollectionService _firestoreCollectionService =
-      FirestoreCollectionService();
+  final FirestoreCollectionService _firestoreCollectionService;
 
   //**************************    Getting the user name of the logged in user   ***************
 
@@ -24,9 +23,8 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
               .get() as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
         DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
-        final loggedInUsername =
-            UserModel.fromFirestore(getLoggedInUserName);
-       return  loggedInUsername;
+        final loggedInUsername = UserModel.fromFirestore(getLoggedInUserName);
+        return loggedInUsername;
       }
     } catch (e) {
       state = state.copyWith(
@@ -39,7 +37,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
 //********************     Getting Shoe Products Fromt the DB  ***********************
 
   Future<List<Product>> getShoeProducts() async {
-    List<Product> products = [];
+    List<Product> shoeProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
           await _firestoreCollectionService.productsRef.get()
@@ -49,7 +47,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
             getProducts.docs;
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        products = product;
+        shoeProducts = product;
       } else {
         log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
@@ -58,12 +56,12 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         loadingState: LoadingState.error,
       );
     }
-    return products;
+    return shoeProducts;
   }
 
   //********************     Getting Hoodies Products Fromt the DB  ***********************
   Future<List<Product>> getHoodiesProducts() async {
-    List<Product> products = [];
+    List<Product> hoodieProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
           await _firestoreCollectionService.productsRef.get()
@@ -73,7 +71,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
             getProducts.docs;
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        products = product;
+        hoodieProducts = product;
       } else {
         log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
@@ -82,12 +80,12 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         loadingState: LoadingState.error,
       );
     }
-    return products;
+    return hoodieProducts;
   }
 
   //********************     Getting Hoodies Products Fromt the DB  ***********************
   Future<List<Product>> getWearsProducts() async {
-    List<Product> products = [];
+    List<Product> wearsProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
           await _firestoreCollectionService.productsRef.get()
@@ -97,7 +95,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
             getProducts.docs;
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        products = product;
+        wearsProducts = product;
       } else {
         log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
@@ -106,12 +104,12 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         loadingState: LoadingState.error,
       );
     }
-    return products;
+    return wearsProducts;
   }
 
   //********************     Getting Watches Products Fromt the DB  ***********************
   Future<List<Product>> getWatchesProducts() async {
-    List<Product> products = [];
+    List<Product> watchesProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
           await _firestoreCollectionService.productsRef.get()
@@ -121,7 +119,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
             getProducts.docs;
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        products = product;
+        watchesProducts = product;
       } else {
         log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
@@ -130,7 +128,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         loadingState: LoadingState.error,
       );
     }
-    return products;
+    return watchesProducts;
   }
 }
 

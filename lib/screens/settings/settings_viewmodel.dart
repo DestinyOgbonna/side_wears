@@ -3,15 +3,14 @@ import 'package:building_ui/services/firebase.dart';
 import 'package:building_ui/services/mysharedpref.dart';
 
 class SettingsViewModel extends StateNotifier<SettingsViewState> {
-  SettingsViewModel(this._readServices)
+  SettingsViewModel(this._readServices, this._firestoreCollectionService)
       : super(SettingsViewState(
           userModel: UserModel(),
         ));
   final Reader _readServices;
-  final FirestoreCollectionService _firestoreCollectionService =
-      FirestoreCollectionService();
-      
- Future<UserModel?> getUsername() async {
+  final FirestoreCollectionService _firestoreCollectionService;
+
+  Future<UserModel?> getUsername() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.usersRef
@@ -19,9 +18,8 @@ class SettingsViewModel extends StateNotifier<SettingsViewState> {
               .get() as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
         DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
-        final loggedInUsername =
-            UserModel.fromFirestore(getLoggedInUserName);
-       return  loggedInUsername;
+        final loggedInUsername = UserModel.fromFirestore(getLoggedInUserName);
+        return loggedInUsername;
       }
     } catch (e) {
       state = state.copyWith(

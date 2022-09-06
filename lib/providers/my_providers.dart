@@ -4,6 +4,8 @@ import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.
 import 'package:building_ui/screens/profile_update/profile_update_viewmodel.dart';
 import 'package:building_ui/screens/settings/settings_viewmodel.dart';
 
+import '../screens/payment_flow/paymentflow_viewmodel.dart';
+
 final mySignUpViewmodel =
     StateNotifierProvider<SignUpViewModel, SignUpViewState>(
         ((ref) => SignUpViewModel(ref.read)));
@@ -14,7 +16,7 @@ final mySignInViewmodel =
 
 final myHomeScreenModel =
     StateNotifierProvider<HomeScreenViewModel, HomeScreenState>(
-        ((ref) => HomeScreenViewModel()));
+        ((ref) => HomeScreenViewModel(FirestoreCollectionService())));
 final mySplashScreenModel =
     StateNotifierProvider.autoDispose<SplashScreenViewModel, SplashScreenState>(
         ((ref) => SplashScreenViewModel()));
@@ -23,9 +25,12 @@ final myProfileScreenModel =
         ((ref) => ProfileViewModel()));
 final mySettingsScreenModel =
     StateNotifierProvider<SettingsViewModel, SettingsViewState>(
-        ((ref) => SettingsViewModel(ref.read)));
+        ((ref) => SettingsViewModel(ref.read,FirestoreCollectionService())));
 final myProductsDetailsScreenModel =
     StateNotifierProvider<ProductDetailsViewModel, ProductDetailsViewState>(
-        ((ref) => ProductDetailsViewModel()));
+        ((ref) => ProductDetailsViewModel(FirestoreCollectionService())));
+final myPaymentScreenModel =
+    StateNotifierProvider<PaymentViewModel, PaymentViewState>(
+        ((ref) => PaymentViewModel()));
 
-        final themingProvider = ChangeNotifierProvider<AppThemeProvider>((ref) => AppThemeProvider());
+  final themingProvider = ChangeNotifierProvider<AppThemeProvider>((ref) => AppThemeProvider());

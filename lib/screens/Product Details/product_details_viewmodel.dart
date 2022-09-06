@@ -4,10 +4,9 @@ import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/model/product_model.dart';
 
 class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
-  ProductDetailsViewModel()
+  ProductDetailsViewModel(this._firestoreCollectionService)
       : super(ProductDetailsViewState(productModel: Product()));
-  final FirestoreCollectionService _firestoreCollectionService =
-      FirestoreCollectionService();
+  final FirestoreCollectionService _firestoreCollectionService;
 
   String? prodID;
 

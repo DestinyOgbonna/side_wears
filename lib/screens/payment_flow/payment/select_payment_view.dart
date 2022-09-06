@@ -32,7 +32,7 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
                 image: 'assets/icons/paypal.png',
               ),
               const PaymentTile(
-                type: 'FLutterwave',
+                type: 'Flutterwave',
                 image: 'assets/icons/master.png',
               ),
               const PaymentTile(
@@ -77,18 +77,6 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
               SizedBox(
                 height: 30.h,
               ),
-              Center(
-                  child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CardPayment()));
-                      },
-                      child: const CustomButton(
-                        buttonText: 'Next',
-                        width: 300,
-                      )))
             ],
           ),
         ),

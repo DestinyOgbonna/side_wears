@@ -40,7 +40,6 @@ export 'package:building_ui/screens/cart/widgets/cart_items.dart';
 export 'package:building_ui/screens/payment_flow/address/address.dart';
 export 'package:building_ui/screens/registration/sign_in/sign_in.dart';
 export 'package:building_ui/screens/registration/sign_up/sign_up.dart';
-export 'package:building_ui/screens/payment_flow/paymen_flow.dart';
 export 'package:building_ui/screens/payment_flow/widget/payment_tile.dart';
 export 'package:building_ui/screens/payment_flow/widget/total_details.dart';
 export 'package:google_fonts/google_fonts.dart';
