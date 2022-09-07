@@ -1,7 +1,5 @@
 import 'package:building_ui/exports/exports.dart';
 
-
-
 class AppStyles {
   ///TextStyles
   // static const TextStyle boldText = GoogleFonts.poppins(

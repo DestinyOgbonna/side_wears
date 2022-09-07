@@ -1,11 +1,9 @@
-
-
 import 'package:building_ui/exports/exports.dart';
 
 class AppColors {
-  static const Color primaryColor = Color(0xffffffff);
+  static const Color primaryColor = Color(0xFFEBEAEF);
   static const Color lightprimaryColor = Color(0XFF0C1C39);
-  static const Color whiteColor = Color(0xffffffff);
+  static const Color whiteColor = Color(0xffFFFFFF);
   static const Color darkColor = Color.fromARGB(255, 1, 5, 13);
   static const Color lightgreyColor = Color(0XFF53617E);
   static const Color lightFadedBlueColor = Color(0XFF192B4E);

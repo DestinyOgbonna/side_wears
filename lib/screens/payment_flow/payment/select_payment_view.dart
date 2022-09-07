@@ -10,6 +10,7 @@ class PaymentView extends ConsumerStatefulWidget {
 class _PaymentViewState extends ConsumerState<PaymentView> {
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(myPaymentScreenModel);
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
@@ -31,7 +32,12 @@ class _PaymentViewState extends ConsumerState<PaymentView> {
                 type: 'PayStack',
                 image: 'assets/icons/paypal.png',
               ),
-              const PaymentTile(
+              PaymentTile(
+                isTapped: () {
+                  ref
+                      .read(myPaymentScreenModel.notifier)
+                      .makePaymentWithFlutterWave(context);
+                },
                 type: 'Flutterwave',
                 image: 'assets/icons/master.png',
               ),

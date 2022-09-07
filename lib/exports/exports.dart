@@ -36,7 +36,6 @@ export 'package:building_ui/screens/profile_update/profile_update.dart';
 export 'package:building_ui/screens/settings/widgets/setting_bars.dart';
 export 'package:building_ui/shared/app_bar.dart';
 export 'package:building_ui/screens/Product%20Details/product_details.dart';
-export 'package:building_ui/screens/cart/widgets/cart_items.dart';
 export 'package:building_ui/screens/payment_flow/address/address.dart';
 export 'package:building_ui/screens/registration/sign_in/sign_in.dart';
 export 'package:building_ui/screens/registration/sign_up/sign_up.dart';

@@ -1,6 +1,7 @@
 import 'package:building_ui/exports/exports.dart';
 import 'package:building_ui/providers/theme.dart';
 import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.dart';
+import 'package:building_ui/screens/cart/cart_viewmodel.dart';
 import 'package:building_ui/screens/profile_update/profile_update_viewmodel.dart';
 import 'package:building_ui/screens/settings/settings_viewmodel.dart';
 
@@ -32,5 +33,8 @@ final myProductsDetailsScreenModel =
 final myPaymentScreenModel =
     StateNotifierProvider<PaymentViewModel, PaymentViewState>(
         ((ref) => PaymentViewModel()));
+final myCartcreenModel =
+    StateNotifierProvider<CartViewModel, CartViewState>(
+        ((ref) => CartViewModel(FirestoreCollectionService())));
 
   final themingProvider = ChangeNotifierProvider<AppThemeProvider>((ref) => AppThemeProvider());

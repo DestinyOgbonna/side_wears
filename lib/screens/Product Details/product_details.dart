@@ -112,20 +112,30 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(
-                    Icons.favorite_outline_outlined,
-                    size: 35.0.h,
-                    color: AppColors.lightgreyColor,
+                  InkWell(
+                    onTap: () {
+                      ref
+                          .read(myProductsDetailsScreenModel.notifier)
+                          .toggleFavouriteIcon();
+                    },
+                    child: state.isSelected != true
+                        ? Icon(
+                            Icons.favorite,
+                            size: 35.0.h,
+                            color: AppColors.lightgreyColor,
+                          )
+                        : Icon(
+                            Icons.favorite_outline_outlined,
+                            size: 35.0.h,
+                            color: AppColors.lightgreyColor,
+                          ),
                   ),
                   InkWell(
                     onTap: () {
                       ref
                           .read(myProductsDetailsScreenModel.notifier)
-                          .addtoCart();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CartPage()));
+                          .addToCart();
+                      context.router.push(const CartPageRoute());
                     },
                     child: CustomButton(
                       width: 230.0.w,
