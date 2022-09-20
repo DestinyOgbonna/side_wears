@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class ProfileUpdate extends ConsumerStatefulWidget {
   const ProfileUpdate({Key? key}) : super(key: key);
@@ -189,10 +189,10 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
                     onTap: () {
                       ref.read(myProfileScreenModel.notifier).showProgressBar();
                       ref.read(myProfileScreenModel.notifier).updateUserDetails(
-                          phoneController,
-                          nameController,
-                          userNameController,
-                          addressController,
+                          phoneController.text,
+                          nameController.text,
+                          userNameController.text,
+                          addressController.text,
                           context);
                     },
                     child: state.isProgress != true

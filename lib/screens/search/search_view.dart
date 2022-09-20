@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class SearchView extends ConsumerStatefulWidget {
   const SearchView({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
               margin:
                   EdgeInsets.symmetric(horizontal: 15.0.h, vertical: 30.0.h),
               child: CustomTextField(
-              labelText: 'Search',
+                labelText: 'Search',
                 controller: searchController,
                 obscureText: false,
                 suffixIcon: const Icon(

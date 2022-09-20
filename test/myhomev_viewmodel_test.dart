@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -34,7 +34,7 @@ void main() {
 
     test('Function Recieves a List containing the ShoeProducts from Firebase',
         () async {
-      when(() => collectionService.productsRef
+      when(() => collectionService.shoesRef
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get()).thenAnswer((invocation) async => docsSnap);
       when(() => docsSnap.data()).thenReturn([]);

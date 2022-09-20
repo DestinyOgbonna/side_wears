@@ -1,21 +1,21 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/services/firebase_storage.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/services/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileViewModel extends StateNotifier<ProfileState> {
-  ProfileViewModel() : super(ProfileState());
+  ProfileViewModel(this.storage) : super(ProfileState());
 
   final picker = ImagePicker();
-  final storage = FileStorage();
-  // late String imagepath;
-  // late String imagename;
-  // String? getUserImage;
+  final FileStorage storage;
+  late String imagepath;
+  late String imagename;
+  String? getUserImage;
 
- showProgressBar() {
+  showProgressBar() {
     state = state.copyWith(isProgress: !state.isProgress);
   }
-
 
 //* UPLOAD IMAGE FROM Gallary FUNCTION
   Future<void> uploadProfileImageFromGallery() async {
@@ -26,8 +26,8 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
         final imageGallery = File(pickedFile.path);
         state = state.copyWith(
             loadingState: LoadingState.success, image: imageGallery);
-        state.copyWith(imagename: pickedFile.name);
-        state.copyWith(imagepath: pickedFile.path);
+        imagepath = pickedFile.path;
+        imagename = pickedFile.name;
       }
     } on PlatformException catch (e) {
       Fluttertoast.showToast(
@@ -43,16 +43,12 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
   }
 
 //* UPLOAD IMAGE TO FIRESTORE FUNCTION
-  Future<void> uploadToFireStore() async {
-    //storage.uploadFiles(imagepath, imagename);
-    File file = File(state.imagepath!);
-
-    final ref =
-        storage.firebaseStorage.ref().child('User_Images/${state.imagepath}');
-    final uploadData = ref.putFile(file);
-    final dataSnapshot = await uploadData.whenComplete(() => {});
-    final getProfileUrl = await dataSnapshot.ref.getDownloadURL();
-    state.getUserImage = getProfileUrl;
+  Future<String?> upLoad() async {
+    File file = File(imagepath);
+    Reference ref = storage.firebaseStorage.ref().child(imagepath);
+    await ref.putFile(file);
+    getUserImage = await ref.getDownloadURL();
+    return getUserImage;
   }
 
   //* GET DOWNLOAD URL OF THE APPLICATION
@@ -65,9 +61,8 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
         final imageCamera = File(pickedFile.path);
         state = state.copyWith(
             loadingState: LoadingState.success, image: imageCamera);
-
-        state.copyWith(imagename: pickedFile.name);
-        state.copyWith(imagepath: pickedFile.path);
+        imagepath = pickedFile.path;
+        imagename = pickedFile.name;
       }
     } on PlatformException catch (e) {
       Fluttertoast.showToast(
@@ -83,15 +78,15 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
   }
 
   Future<void> updateUserDetails(
-      TextEditingController phoneController,
-      TextEditingController nameController,
-      TextEditingController userNameController,
-      TextEditingController addressController,
+      String? phoneController,
+      String? nameController,
+      String? userNameController,
+      String? addressController,
       BuildContext context) async {
-    if (phoneController.text.isEmpty ||
-        userNameController.text.isEmpty ||
-        addressController.text.isEmpty ||
-        nameController.text.isEmpty) {
+    if (phoneController!.isEmpty ||
+        userNameController!.isEmpty ||
+        addressController!.isEmpty ||
+        nameController!.isEmpty) {
       Fluttertoast.showToast(
           msg: 'Please fill all the fields',
           toastLength: Toast.LENGTH_LONG,
@@ -106,13 +101,13 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
             .collection('users')
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .update({
-          'phone': phoneController.text.toString().trim(),
-          'username': userNameController.text.toString().trim(),
-          'name': nameController.text.toString().trim(),
-          'address': addressController.text.toString().trim(),
-          'user_image': state.getUserImage.toString()
+          'phone': phoneController.toString().trim(),
+          'username': userNameController.toString().trim(),
+          'name': nameController.toString().trim(),
+          'address': addressController.toString().trim(),
+          'user_image': getUserImage
         }).then((value) {
-          uploadToFireStore();
+          upLoad();
           Fluttertoast.showToast(
               msg: "Profile Update Successful",
               toastLength: Toast.LENGTH_LONG,

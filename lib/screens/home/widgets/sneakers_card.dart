@@ -1,4 +1,5 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Sneakers extends StatelessWidget {
   final String prodImage;
@@ -25,9 +26,11 @@ class Sneakers extends StatelessWidget {
             height: 350.0.h,
             width: double.infinity,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(prodImage), fit: BoxFit.cover),
               borderRadius: BorderRadius.circular(5.0.r),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: prodImage,
+              fit: BoxFit.cover,
             ),
           ),
           Positioned(

@@ -1,5 +1,4 @@
-
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
   SplashScreenViewModel() : super(SplashScreenState());
@@ -16,7 +15,7 @@ class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
-          
+
         break;
       case ConnectivityResult.bluetooth:
         Fluttertoast.showToast(

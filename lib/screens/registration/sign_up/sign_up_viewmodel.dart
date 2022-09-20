@@ -1,5 +1,5 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/services/firebase.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/services/firebase.dart';
 
 class SignUpViewModel extends StateNotifier<SignUpViewState> {
   SignUpViewModel(this._readServices)
@@ -10,19 +10,21 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
   obscurePassword() {
     state = state.copyWith(isSelected: !state.isSelected);
   }
- showProgressBar() {
+
+  showProgressBar() {
     state = state.copyWith(isProgress: !state.isProgress);
   }
+
   Future signUpUser(
-      TextEditingController emailController,
-      TextEditingController passwordController,
-      TextEditingController nameController,
-      TextEditingController userNameController,
-      BuildContext context) async {
-    if (emailController.text.isEmpty ||
-        passwordController.text.isEmpty ||
-        userNameController.text.isEmpty ||
-        passwordController.text.isEmpty) {
+      {required String emailController,
+      required String passwordController,
+      required String nameController,
+      required String userNameController,
+      required BuildContext context}) async {
+    if (emailController.isEmpty ||
+        passwordController.isEmpty ||
+        userNameController.isEmpty ||
+        passwordController.isEmpty) {
       Fluttertoast.showToast(
           msg: 'Please fill all the fields',
           toastLength: Toast.LENGTH_LONG,
@@ -37,8 +39,8 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
       try {
         final signUpUser = _readServices(firebaseProvider)
             .createNewUser(
-                email: emailController.text.toString().trim(),
-                password: passwordController.text.toString().trim())
+                email: emailController.toString().trim(),
+                password: passwordController.toString().trim())
             .then((value) {
           Fluttertoast.showToast(
               msg: "Sign Up Successful",
@@ -49,12 +51,11 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
               textColor: Colors.white,
               fontSize: 16.0);
           addUserData(emailController, nameController, userNameController);
-
           context.router.replaceAll(const [SignInPageRoute()]);
           state = state.copyWith(loadingState: LoadingState.success);
         }).catchError((err) {
           Fluttertoast.showToast(
-              msg: err.message,
+              msg: err.code,
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.SNACKBAR,
               timeInSecForIosWeb: 1,
@@ -65,14 +66,35 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
         });
         return signUpUser;
       } on FirebaseAuthException catch (e) {
-        Fluttertoast.showToast(
-            msg: '${e.message}',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.SNACKBAR,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        if (e.code == 'auth/wrong-password') {
+          Fluttertoast.showToast(
+              msg: 'Password is not correct',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else if (e.code == 'auth/user-not-found') {
+          Fluttertoast.showToast(
+              msg: 'User not found',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else if (e.code == 'auth/invalid-email') {
+          Fluttertoast.showToast(
+              msg: 'Invalid Email address',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+
         state = state.copyWith(loadingState: LoadingState.error);
       } on SocketException {
         Fluttertoast.showToast(
@@ -88,15 +110,13 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
     }
   }
 
-  Future addUserData(
-      TextEditingController emailController,
-      TextEditingController nameController,
-      TextEditingController userNameController) async {
+  Future addUserData(String? emailController, String? nameController,
+      String? userNameController) async {
     try {
       final userModel = UserModel(
-        name: nameController.text.toString().trim(),
-        email: emailController.text.toString().trim(),
-        username: userNameController.text.toString().trim(),
+        name: nameController.toString().trim(),
+        email: emailController.toString().trim(),
+        username: userNameController.toString().trim(),
       );
       final docRef = FirebaseFirestore.instance
           .collection('users')
@@ -125,7 +145,8 @@ class SignUpViewState {
   bool isProgress;
   SignUpViewState(
       {this.loadingState = LoadingState.loading,
-      this.userModel,this.isProgress = false,
+      this.userModel,
+      this.isProgress = false,
       this.isSelected = true});
 
   SignUpViewState copyWith({
@@ -135,9 +156,10 @@ class SignUpViewState {
     bool? isProgress,
   }) {
     return SignUpViewState(
-        isSelected: isSelected ?? this.isSelected,
-        loadingState: loadingState ?? this.loadingState,
-        userModel: userModel ?? userModel, isProgress: isProgress ?? this.isProgress,);
-        
+      isSelected: isSelected ?? this.isSelected,
+      loadingState: loadingState ?? this.loadingState,
+      userModel: userModel ?? userModel,
+      isProgress: isProgress ?? this.isProgress,
+    );
   }
 }

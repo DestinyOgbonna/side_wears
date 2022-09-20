@@ -1,6 +1,5 @@
-import 'dart:developer';
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/model/product_model.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/model/product_model.dart';
 
 class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
   ProductDetailsViewModel(this._firestoreCollectionService)
@@ -13,10 +12,11 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
     prodID = selectedprodID;
   }
 
+//*  GETTING PRODUCT DETAILS FROM SHOES SECTION
   Future getProducts() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
-          await _firestoreCollectionService.productsRef.doc(prodID).get()
+          await _firestoreCollectionService.shoesRef.doc(prodID).get()
               as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
         state = state.copyWith(
@@ -36,10 +36,60 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
     }
   }
 
+//*  GETTING PRODUCT DETAILS FROM WristWatch SECTION
+  Future getWristWatch() async {
+    await Future.delayed(const Duration(seconds: 5));
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> getWatchProducts =
+          await _firestoreCollectionService.watchesRef.doc(prodID).get()
+              as DocumentSnapshot<Map<String, dynamic>>;
+      if (getWatchProducts.exists) {
+        state = state.copyWith(
+          loadingState: LoadingState.loading,
+        );
+        final showProductDetails = Product.fromFirestore(getWatchProducts);
+        state = state.copyWith(
+          loadingState: LoadingState.success,
+          productModel: showProductDetails,
+        );
+        return showProductDetails;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
+  }
+
+//*  GETTING PRODUCT DETAILS FROM HOODIES SECTION
+  Future getHoddies() async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> getHoodieproducts =
+          await _firestoreCollectionService.hoodieRef.doc(prodID).get()
+              as DocumentSnapshot<Map<String, dynamic>>;
+      if (getHoodieproducts.exists) {
+        state = state.copyWith(
+          loadingState: LoadingState.loading,
+        );
+        final showProductDetails = Product.fromFirestore(getHoodieproducts);
+        state = state.copyWith(
+          loadingState: LoadingState.success,
+          productModel: showProductDetails,
+        );
+        return showProductDetails;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        loadingState: LoadingState.error,
+      );
+    }
+  }
+
+//!NEEDS TO BE REPEATED
   Future<Product?> addToCart() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
-          await _firestoreCollectionService.productsRef.doc(prodID).get()
+          await _firestoreCollectionService.watchesRef.doc(prodID).get()
               as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
         state = state.copyWith(
@@ -50,7 +100,7 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
           loadingState: LoadingState.success,
           productModel: showProductDetails,
         );
-        final docRef = _firestoreCollectionService.usersRef
+        _firestoreCollectionService.usersRef
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection('Cart')
             .doc('$prodID')
@@ -67,11 +117,74 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
         loadingState: LoadingState.error,
       );
     }
+    return null;
   }
 
-  toggleFavouriteIcon() {
+//!NEEDS TO BE REPEATED
+
+  Future toggleFavouriteIcon() async {
     state = state.copyWith(isSelected: !state.isSelected);
-    print('${state.isSelected}');
+    if (state.isSelected != true) {
+      try {
+        final DocumentSnapshot<Map<String, dynamic>> getUser =
+            await _firestoreCollectionService.watchesRef.doc(prodID).get()
+                as DocumentSnapshot<Map<String, dynamic>>;
+        if (getUser.exists) {
+          state = state.copyWith(
+            loadingState: LoadingState.loading,
+          );
+          final showProductDetails = Product.fromFirestore(getUser);
+          state = state.copyWith(
+            loadingState: LoadingState.success,
+            productModel: showProductDetails,
+          );
+          _firestoreCollectionService.usersRef
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection('Favorites')
+              .doc('$prodID')
+              .set(
+            {
+              'product_name': showProductDetails.productName,
+              'product_price': showProductDetails.productPrice,
+              'product_description': showProductDetails.productDescription,
+              'product_image': showProductDetails.productImages,
+            },
+          );
+          Fluttertoast.showToast(
+              msg: 'Added to Favourite',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          return showProductDetails;
+        }
+      } on FirebaseException catch (e) {
+        Fluttertoast.showToast(
+            msg: '${e.message}',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.SNACKBAR,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else {
+      _firestoreCollectionService.usersRef
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('Favorites')
+          .doc('$prodID')
+          .delete();
+      Fluttertoast.showToast(
+          msg: 'Removed From Favorites',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.SNACKBAR,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 }
 

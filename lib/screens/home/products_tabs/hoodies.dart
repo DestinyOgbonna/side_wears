@@ -1,5 +1,7 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/model/product_model.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/model/product_model.dart';
+import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
+import 'package:building_ui/styles/utils/shimmers/products_shimmer.dart';
 
 class HoodiesTab extends ConsumerStatefulWidget {
   const HoodiesTab({Key? key}) : super(key: key);
@@ -18,8 +20,11 @@ class _HoodiesTabState extends ConsumerState<HoodiesTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Product>>(
-      future: ref.read(myHomeScreenModel.notifier).getShoeProducts(),
+      future: ref.read(myHomeScreenModel.notifier).getHoodiesProducts(),
       builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const ProductShimmer();
+        }
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const Center(
@@ -46,7 +51,7 @@ class _HoodiesTabState extends ConsumerState<HoodiesTab> {
                       ref
                           .read(myProductsDetailsScreenModel.notifier)
                           .productId(products[index].id);
-                      context.router.push(const ProductDetailsRoute());
+                      context.router.push(const HoodiesDetailsRoute());
                     },
                     child: Sneakers(
                       prodImage: '${products[index].productImages?[1]}',

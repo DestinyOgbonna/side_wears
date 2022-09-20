@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
-import '../../services/local_notification.dart';
+import '../../core/services/local_notification.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,13 +18,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     ref.read(mySplashScreenModel.notifier).checkInternetConnection();
     ref.read(mySignInViewmodel.notifier).saveUserLoginState(context);
     Timer(const Duration(milliseconds: 3000), () {
-      context.router.replaceAll(const [SignUpPageRoute()]);
-
-      service = LocalNotificationService();
+      context.router.replaceAll(
+        const [SignUpPageRoute()],
+      );
+    });
+    service = LocalNotificationService();
       service.initialize();
       listenToNotification();
       service.showScheduledNotification();
-    });
   }
 
   @override

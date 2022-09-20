@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutterwave_standard/flutterwave.dart';
 
-import '../../exports/exports.dart';
+import '../../core/exports/exports.dart';
 
 class PaymentViewModel extends StateNotifier<PaymentViewState> {
   PaymentViewModel() : super(PaymentViewState());

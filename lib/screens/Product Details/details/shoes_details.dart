@@ -1,17 +1,17 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class ProductDetails extends ConsumerStatefulWidget {
-  const ProductDetails({
+class ShoesDetails extends ConsumerStatefulWidget {
+  const ShoesDetails({
     Key? key,
   }) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ProductDetailsState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ShoesDetailsState();
 }
 
-class _ProductDetailsState extends ConsumerState<ProductDetails> {
+class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
   @override
   void initState() {
     super.initState();
@@ -33,10 +33,10 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
                 children: [
                   CarouselSlider.builder(
                     options: CarouselOptions(
-                      height: 370.0.h,
-                      autoPlay: true,
-                      viewportFraction: 1,
-                    ),
+                        height: 400.0.h,
+                        autoPlay: true,
+                        viewportFraction: 1,
+                        initialPage: 1),
                     itemCount: state.productModel.productImages?.length,
                     itemBuilder:
                         (BuildContext context, int index, int realIndex) {
@@ -88,10 +88,15 @@ class _ProductDetailsState extends ConsumerState<ProductDetails> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${state.productModel.productDescription}',
-                  style: AppStyles.mediumgreyText,
-                  textAlign: TextAlign.start,
+                child: ConstrainedBox(
+                   constraints:
+                                              const BoxConstraints.expand(
+                                                  height: 150),
+                  child: Text(
+                    '${state.productModel.productDescription}',
+                    style: AppStyles.mediumgreyText,
+                    textAlign: TextAlign.start,
+                  ),
                 ),
               ),
               SizedBox(

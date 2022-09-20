@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 Future selectImageModal(BuildContext context) {
   return showModalBottomSheet(
@@ -14,7 +14,6 @@ Future selectImageModal(BuildContext context) {
             leading: Icon(Icons.browse_gallery),
             title: Text('Gallery'),
           ),
-
         ],
       );
     },

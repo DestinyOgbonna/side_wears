@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/screens/favourite/favourite.dart';
 import 'package:building_ui/screens/search/search_view.dart';
 
@@ -12,7 +12,7 @@ class Home extends ConsumerStatefulWidget {
 class _HomeState extends ConsumerState<Home> {
   final List<Widget> _items = [
     const HomeScreen(),
-    const FavouritePage(),
+    const FavoritePage(),
     const SearchView(),
     const SettingsPage(),
   ];

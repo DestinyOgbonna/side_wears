@@ -1,6 +1,6 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/services/firebase.dart';
-import 'package:building_ui/services/mysharedpref.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/services/firebase.dart';
+import 'package:building_ui/core/services/mysharedpref.dart';
 
 class SettingsViewModel extends StateNotifier<SettingsViewState> {
   SettingsViewModel(this._readServices, this._firestoreCollectionService)

@@ -1,6 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
-
-
+import 'package:building_ui/core/exports/exports.dart';
 
 class MyThemes {
   static final darkTheme = ThemeData(

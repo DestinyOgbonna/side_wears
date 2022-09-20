@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -102,11 +102,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     onTap: () {
                       ref.read(mySignUpViewmodel.notifier).showProgressBar();
                       ref.read(mySignUpViewmodel.notifier).signUpUser(
-                          emailController,
-                          passwordController,
-                          nameController,
-                          userNameController,
-                          context);
+                          emailController: emailController.text,
+                          passwordController: passwordController.text,
+                          nameController: nameController.text,
+                          userNameController: userNameController.text,
+                          context: context);
                     },
                     child: state.isProgress != true
                         ? const CustomButton(

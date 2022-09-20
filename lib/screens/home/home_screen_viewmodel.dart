@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/model/product_model.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/model/product_model.dart';
 
 class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
   HomeScreenViewModel(this._firestoreCollectionService)
@@ -40,7 +40,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
     List<Product> shoeProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.productsRef.get()
+          await _firestoreCollectionService.shoesRef.get()
               as QuerySnapshot<Map<String, dynamic>>;
       if (getProducts.docs.isNotEmpty) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
@@ -64,7 +64,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
     List<Product> hoodieProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.productsRef.get()
+          await _firestoreCollectionService.hoodieRef.get()
               as QuerySnapshot<Map<String, dynamic>>;
       if (getProducts.docs.isNotEmpty) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
@@ -88,7 +88,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
     List<Product> wearsProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.productsRef.get()
+          await _firestoreCollectionService.shirtsRef.get()
               as QuerySnapshot<Map<String, dynamic>>;
       if (getProducts.docs.isNotEmpty) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
@@ -112,7 +112,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
     List<Product> watchesProducts = [];
     try {
       final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.productsRef.get()
+          await _firestoreCollectionService.watchesRef.get()
               as QuerySnapshot<Map<String, dynamic>>;
       if (getProducts.docs.isNotEmpty) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =

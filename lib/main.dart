@@ -1,13 +1,16 @@
-import 'package:building_ui/exports/exports.dart';
-import 'package:building_ui/providers/theme.dart';
+import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/providers/theme.dart';
 
-import 'package:building_ui/themes/themes.dart';
+import 'package:building_ui/core/themes/themes.dart';
 
-import 'services/mysharedpref.dart';
+import 'firebase_options.dart';
+import 'core/services/mysharedpref.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   await MysharedPref().getInstance();
   runApp(const ProviderScope(child: MyApp()));
 }

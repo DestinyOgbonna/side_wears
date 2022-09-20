@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class AddressPage extends ConsumerWidget {
   const AddressPage({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class AddressPage extends ConsumerWidget {
                 SizedBox(
                   width: 330.0.w,
                   child: const CustomTextField(
-                  labelText: 'Home Adddress',
+                    labelText: 'Home Adddress',
                     obscureText: false,
                   ),
                 ),
@@ -65,14 +65,14 @@ class AddressPage extends ConsumerWidget {
                       SizedBox(
                         width: 155.0.w,
                         child: const CustomTextField(
-                        labelText: 'Enter State',
+                          labelText: 'Enter State',
                           obscureText: false,
                         ),
                       ),
                       SizedBox(
                         width: 155.0.w,
                         child: const CustomTextField(
-                        labelText: 'Enter City',
+                          labelText: 'Enter City',
                           obscureText: false,
                         ),
                       ),

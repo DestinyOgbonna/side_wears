@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -75,7 +75,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                     onTap: () {
                       ref.read(mySignInViewmodel.notifier).showProgressBar();
                       ref.read(mySignInViewmodel.notifier).signUserIntoApp(
-                          emailController, passwordController, context);
+                          emailController: emailController.text.trim(),
+                          passwordController: passwordController.text.trim(),
+                          context: context);
                     },
                     child: state.isProgress != true
                         ? const CustomButton(

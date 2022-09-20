@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "924828243229",
-    "project_id": "lordwears",
-    "storage_bucket": "lordwears.appspot.com"
+    "project_number": "104631576829",
+    "project_id": "sidewears-760e4",
+    "storage_bucket": "sidewears-760e4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:924828243229:android:558dbbc1895afbff6c7df4",
+        "mobilesdk_app_id": "1:104631576829:android:302e5ce1d7894b3e0db694",
         "android_client_info": {
-          "package_name": "com.example.building_ui"
+          "package_name": "com.example.side_wears"
         }
       },
       "oauth_client": [
         {
-          "client_id": "924828243229-9qv65v3pbm1ugcu5mi0kjofbgch4nvbk.apps.googleusercontent.com",
+          "client_id": "104631576829-71s8opc54ie2a9opvrd4buddv4lifcas.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAkpXePsm3I489Pai9qX47UvYi2TNr_s_I"
+          "current_key": "AIzaSyDq00zn9gFWSycASpYqp7SMp6pR8omu1R0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "924828243229-9qv65v3pbm1ugcu5mi0kjofbgch4nvbk.apps.googleusercontent.com",
+              "client_id": "104631576829-71s8opc54ie2a9opvrd4buddv4lifcas.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

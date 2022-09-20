@@ -1,4 +1,4 @@
-import 'package:building_ui/exports/exports.dart';
+import 'package:building_ui/core/exports/exports.dart';
 
 class CardPayment extends ConsumerWidget {
   const CardPayment({Key? key}) : super(key: key);
