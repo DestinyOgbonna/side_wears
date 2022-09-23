@@ -1,4 +1,5 @@
 import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/model/product_model.dart';
 import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
 import 'package:building_ui/screens/Product%20Details/widgets/clothes_sizes.dart';
 import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
@@ -24,13 +25,18 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
   Widget build(BuildContext context) {
     final state = ref.watch(myProductsDetailsScreenModel);
     return Scaffold(
-      body: state.loadingState == LoadingState.loading
-          ? const Shimmers()
-          : SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SizedBox(
-                // margin: EdgeInsets.symmetric(horizontal: 15.0.h),
-                child: Column(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SizedBox(
+          child: FutureBuilder<Product?>(
+            future: ref.watch(myProductsDetailsScreenModel.notifier).getHoddies(),
+            builder: ((context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Shimmers();
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                final hoodiesDetails = snapshot.data;
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(
@@ -41,11 +47,10 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                             autoPlay: true,
                             viewportFraction: 1,
                           ),
-                          itemCount: state.productModel.productImages?.length,
+                          itemCount: hoodiesDetails!.productImages?.length,
                           itemBuilder:
                               (BuildContext context, int index, int realIndex) {
-                            final image =
-                                state.productModel.productImages![index];
+                            final image = hoodiesDetails.productImages![index];
                             return showImages(image, index);
                           },
                         ),
@@ -79,12 +84,12 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('${state.productModel.productName}',
+                          child: Text('${hoodiesDetails.productName}',
                               style: AppStyles.boldgreyText),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('${state.productModel.productPrice}',
+                          child: Text('${hoodiesDetails.productPrice}',
                               style: AppStyles.normalgreyText),
                         ),
                       ],
@@ -97,7 +102,7 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.expand(height: 100),
                         child: Text(
-                          '${state.productModel.productDescription}',
+                          '${hoodiesDetails.productDescription}',
                           style: AppStyles.mediumgreyText,
                           textAlign: TextAlign.start,
                         ),
@@ -154,9 +159,13 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                       ],
                     ),
                   ],
-                ),
-              ),
-            ),
+                );
+              }
+              return const SizedBox();
+            }),
+          ),
+        ),
+      ),
     );
   }
 }

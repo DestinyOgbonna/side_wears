@@ -18,26 +18,25 @@ class _CartPageState extends ConsumerState<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      displacement: 250,
-      backgroundColor: Colors.yellow,
-      color: Colors.red,
-      strokeWidth: 3,
-      triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      onRefresh: () async {
-        await Future.delayed(const Duration(milliseconds: 1500));
-        setState(() {});
-      },
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0.h),
-          child: const MyAppBar(
-            isSettings: false,
-            title: 'Cart',
-          ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50.0.h),
+        child: const MyAppBar(
+          isSettings: false,
+          title: 'Cart',
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: RefreshIndicator(
+          displacement: 250,
+          backgroundColor: AppColors.lightgreyColor,
+          color: AppColors.whiteColor,
+          strokeWidth: 3,
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          onRefresh: () async {
+          ref.watch(myCartcreenModel.notifier).getProductsFromCart();
+        },
           child: Container(
             margin: EdgeInsets.only(top: 15.0.h),
             child: Column(

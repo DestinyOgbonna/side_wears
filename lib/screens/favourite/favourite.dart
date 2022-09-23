@@ -27,156 +27,171 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
-          margin: EdgeInsets.only(top: 15.0.h),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 510.0.h,
-                child: FutureBuilder<List<Product>>(
-                    future: ref
-                        .watch(myFavoritescreenModel.notifier)
-                        .getProductsFromFavorite(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.data!.isEmpty) {
+        child: RefreshIndicator(
+          displacement: 250,
+          backgroundColor: AppColors.lightgreyColor,
+          color: AppColors.whiteColor,
+          strokeWidth: 3,
+          // triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          onRefresh: () async {
+            ref.watch(myFavoritescreenModel.notifier).getProductsFromFavorite();
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: 15.0.h),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 510.0.h,
+                  child: FutureBuilder<List<Product>>(
+                      future: ref
+                          .watch(myFavoritescreenModel.notifier)
+                          .getProductsFromFavorite(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const Center(
-                            child: Text('Oopss No Item in Cart...'),
+                            child: CircularProgressIndicator.adaptive(),
                           );
                         }
-                        final favoriteItems = snapshot.data;
-                        return ScrollConfiguration(
-                          behavior: RemoveScrollGlow(),
-                          child: ListView.separated(
-                            itemCount: favoriteItems!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Dismissible(
-                                key: UniqueKey(),
-                                direction: DismissDirection.endToStart,
-                                onDismissed: (_) {
-                                  ref
-                                      .read(myFavoritescreenModel.notifier)
-                                      .removeFromFavorite();
-                                },
-                                child: Container(
-                                  key: const ValueKey(Text),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  height: 115,
-                                  width: double.infinity,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text('Oopss No Favorites...'),
+                            );
+                          }
+                          final favoriteItems = snapshot.data;
+                          return ScrollConfiguration(
+                            behavior: RemoveScrollGlow(),
+                            child: ListView.separated(
+                              itemCount: favoriteItems!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Dismissible(
+                                  key: UniqueKey(),
+                                  direction: DismissDirection.endToStart,
+                                  onDismissed: (_) {
+                                    ref
+                                        .read(myFavoritescreenModel.notifier)
+                                        .removeFromFavorite();
+                                  },
+                                  child: Container(
+                                    key: const ValueKey(Text),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    height: 115,
+                                    width: double.infinity,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        height: 150.0.h,
-                                        width: 100.0.h,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                '${favoriteItems[index].productImages?[1]}'),
-                                            fit: BoxFit.cover,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          height: 150.0.h,
+                                          width: 100.0.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  '${favoriteItems[index].productImages?[1]}'),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 19),
-                                          Text(
-                                              '${favoriteItems[index].productName}',
-                                              style: AppStyles.normalgreyText),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                              '${favoriteItems[index].productPrice}',
-                                              style: AppStyles.normalgreyText),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                              '${favoriteItems[index].productPrice}',
-                                              style: AppStyles.normalgreyText),
-                                        ],
-                                      ),
-                                      Container(
-                                        width: 40,
-                                        decoration: const BoxDecoration(
-                                          color: AppColors.lightgreyColor,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30),
-                                          ),
-                                        ),
-                                        child: Column(
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            IconButton(
-                                              icon: const Icon(Icons.add),
-                                              onPressed: () {},
-                                              splashRadius: 30,
-                                            ),
+                                            const SizedBox(height: 19),
                                             Text(
-                                              '7',
-                                              style: GoogleFonts.montserrat(
-                                                  color: AppColors.whiteColor),
-                                            ),
-                                            IconButton(
-                                              splashRadius: 30,
-                                              icon: const Icon(Icons.remove),
-                                              onPressed: () {},
-                                            ),
+                                                '${favoriteItems[index].productName}',
+                                                style:
+                                                    AppStyles.normalgreyText),
+                                            const SizedBox(height: 10),
+                                            Text(
+                                                '${favoriteItems[index].productPrice}',
+                                                style:
+                                                    AppStyles.normalgreyText),
+                                            const SizedBox(height: 10),
+                                            Text(
+                                                '${favoriteItems[index].productPrice}',
+                                                style:
+                                                    AppStyles.normalgreyText),
                                           ],
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                background: Container(
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.redColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
+                                        Container(
+                                          width: 40,
+                                          decoration: const BoxDecoration(
+                                            color: AppColors.lightgreyColor,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.add),
+                                                onPressed: () {},
+                                                splashRadius: 30,
+                                              ),
+                                              Text(
+                                                '7',
+                                                style: GoogleFonts.montserrat(
+                                                    color:
+                                                        AppColors.whiteColor),
+                                              ),
+                                              IconButton(
+                                                splashRadius: 30,
+                                                icon: const Icon(Icons.remove),
+                                                onPressed: () {},
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 15),
-                                  alignment: Alignment.centerRight,
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(right: 48.0),
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: AppColors.whiteColor,
+                                  background: Container(
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.redColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                    ),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
+                                    alignment: Alignment.centerRight,
+                                    child: const Padding(
+                                      padding: EdgeInsets.only(right: 48.0),
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: AppColors.whiteColor,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return Divider(
-                                height: 10.0.h,
-                              );
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text('Oopss An error occured.....'),
-                        );
-                      }
-                      return const Center(child: CircularProgressIndicator());
-                    }),
-              ),
-            ],
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return Divider(
+                                  height: 10.0.h,
+                                );
+                              },
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Text('Oopss An error occured.....'),
+                          );
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      }),
+                ),
+              ],
+            ),
           ),
         ),
       ),

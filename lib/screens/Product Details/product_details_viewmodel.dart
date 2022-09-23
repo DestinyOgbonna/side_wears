@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
 
@@ -13,20 +15,14 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
   }
 
 //*  GETTING PRODUCT DETAILS FROM SHOES SECTION
-  Future getProducts() async {
+  Future<Product?> getProducts() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.shoesRef.doc(prodID).get()
               as DocumentSnapshot<Map<String, dynamic>>;
       if (getUser.exists) {
-        state = state.copyWith(
-          loadingState: LoadingState.loading,
-        );
-        final showProductDetails = Product.fromFirestore(getUser);
-        state = state.copyWith(
-          loadingState: LoadingState.success,
-          productModel: showProductDetails,
-        );
+        DocumentSnapshot<Map<String, dynamic>> getProductDetails = getUser;
+        final showProductDetails = Product.fromFirestore(getProductDetails);
         return showProductDetails;
       }
     } catch (e) {
@@ -34,55 +30,45 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
         loadingState: LoadingState.error,
       );
     }
+    return null;
   }
 
 //*  GETTING PRODUCT DETAILS FROM WristWatch SECTION
-  Future getWristWatch() async {
-    await Future.delayed(const Duration(seconds: 5));
+  Future<Product?> getWristWatch() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getWatchProducts =
           await _firestoreCollectionService.watchesRef.doc(prodID).get()
               as DocumentSnapshot<Map<String, dynamic>>;
       if (getWatchProducts.exists) {
-        state = state.copyWith(
-          loadingState: LoadingState.loading,
-        );
-        final showProductDetails = Product.fromFirestore(getWatchProducts);
-        state = state.copyWith(
-          loadingState: LoadingState.success,
-          productModel: showProductDetails,
-        );
+        DocumentSnapshot<Map<String, dynamic>> getWatchDetail =
+            getWatchProducts;
+        final showProductDetails = Product.fromFirestore(getWatchDetail);
         return showProductDetails;
       }
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      rethrow;
     }
+    return null;
   }
 
 //*  GETTING PRODUCT DETAILS FROM HOODIES SECTION
-  Future getHoddies() async {
+  Future<Product?> getHoddies() async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> getHoodieproducts =
           await _firestoreCollectionService.hoodieRef.doc(prodID).get()
               as DocumentSnapshot<Map<String, dynamic>>;
       if (getHoodieproducts.exists) {
-        state = state.copyWith(
-          loadingState: LoadingState.loading,
-        );
-        final showProductDetails = Product.fromFirestore(getHoodieproducts);
-        state = state.copyWith(
-          loadingState: LoadingState.success,
-          productModel: showProductDetails,
-        );
+        DocumentSnapshot<Map<String, dynamic>> getHoodieDetail =
+            getHoodieproducts;
+
+        final showProductDetails = Product.fromFirestore(getHoodieDetail);
+
         return showProductDetails;
       }
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      rethrow;
     }
+    return null;
   }
 
 //!NEEDS TO BE REPEATED
@@ -110,6 +96,14 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
           'product_description': showProductDetails.productDescription,
           'product_image': showProductDetails.productImages,
         });
+        Fluttertoast.showToast(
+            msg: 'Added to Cart',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.SNACKBAR,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return showProductDetails;
       }
     } catch (e) {

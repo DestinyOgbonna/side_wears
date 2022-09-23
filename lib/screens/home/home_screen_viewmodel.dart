@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
 
@@ -27,9 +25,7 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         return loggedInUsername;
       }
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      rethrow;
     }
     return null;
   }
@@ -48,8 +44,6 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
         shoeProducts = product;
-      } else {
-        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
     } catch (e) {
       state = state.copyWith(
@@ -72,8 +66,6 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
         hoodieProducts = product;
-      } else {
-        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
     } catch (e) {
       state = state.copyWith(
@@ -96,8 +88,6 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
         wearsProducts = product;
-      } else {
-        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
     } catch (e) {
       state = state.copyWith(
@@ -120,8 +110,6 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
         final product =
             shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
         watchesProducts = product;
-      } else {
-        log('!!!!!!!!!!!!! OMOH U DON COOK BEANS !!!!!!!!!!!!!');
       }
     } catch (e) {
       state = state.copyWith(

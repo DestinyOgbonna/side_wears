@@ -24,7 +24,9 @@ class FavoriteViewModel extends StateNotifier<FavoriteViewState> {
             showCartItems.map((cart) => Product.fromFirestore(cart)).toList();
         cartProducts = displayCartItems;
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
 
     return cartProducts;
   }
