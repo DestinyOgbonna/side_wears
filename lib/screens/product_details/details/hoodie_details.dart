@@ -1,8 +1,9 @@
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
-import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
-import 'package:building_ui/screens/Product%20Details/widgets/clothes_sizes.dart';
+import 'package:building_ui/screens/product_details/widgets/carousel.dart';
+import 'package:building_ui/screens/product_details/widgets/clothes_sizes.dart';
 import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
+import 'package:building_ui/widgets/alert_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class HoodiesDetails extends ConsumerStatefulWidget {
@@ -18,7 +19,7 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
   @override
   void initState() {
     super.initState();
-    ref.read(myProductsDetailsScreenModel.notifier).getHoddies();
+    ref.read(myProductsDetailsScreenModel.notifier).getHoodies();
   }
 
   @override
@@ -29,7 +30,8 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
         scrollDirection: Axis.vertical,
         child: SizedBox(
           child: FutureBuilder<Product?>(
-            future: ref.watch(myProductsDetailsScreenModel.notifier).getHoddies(),
+            future:
+                ref.watch(myProductsDetailsScreenModel.notifier).getHoodies(),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Shimmers();
@@ -77,20 +79,33 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                       ],
                     ),
                     SizedBox(
-                      height: 25.0.h,
+                      height: 15.0.h,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('${hoodiesDetails.productName}',
                               style: AppStyles.boldgreyText),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('${hoodiesDetails.productPrice}',
-                              style: AppStyles.normalgreyText),
+                        InkWell(
+                          onTap: () {
+                            ref
+                                .read(myProductsDetailsScreenModel.notifier)
+                                .toggleFavouriteIcon();
+                          },
+                          child: state.isSelected != true
+                              ? Icon(
+                                  Icons.favorite,
+                                  size: 25.0.h,
+                                  color: AppColors.redColor,
+                                )
+                              : Icon(
+                                  Icons.favorite_outline_outlined,
+                                  size: 25.0.h,
+                                  color: AppColors.lightgreyColor,
+                                ),
                         ),
                       ],
                     ),
@@ -98,14 +113,11 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                       height: 10.0.h,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.expand(height: 100),
-                        child: Text(
-                          '${hoodiesDetails.productDescription}',
-                          style: AppStyles.mediumgreyText,
-                          textAlign: TextAlign.start,
-                        ),
+                      padding: EdgeInsets.only(left: 8.0.h, right: 8.0.h),
+                      child: Text(
+                        '${hoodiesDetails.productDescription}',
+                        style: AppStyles.mediumgreyText,
+                        textAlign: TextAlign.start,
                       ),
                     ),
                     SizedBox(
@@ -126,33 +138,68 @@ class _HoodiesDetailsState extends ConsumerState<HoodiesDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            ref
-                                .read(myProductsDetailsScreenModel.notifier)
-                                .toggleFavouriteIcon();
-                          },
-                          child: state.isSelected != true
-                              ? Icon(
-                                  Icons.favorite,
-                                  size: 35.0.h,
-                                  color: AppColors.lightgreyColor,
-                                )
-                              : Icon(
-                                  Icons.favorite_outline_outlined,
-                                  size: 35.0.h,
-                                  color: AppColors.lightgreyColor,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('\$${hoodiesDetails.productPrice}',
+                              style: AppStyles.normalgreyText),
+                        ),
+                        Container(
+                          height: 30.0.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                  width: 1.0, color: AppColors.darkColor)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  size: 18,
                                 ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .increaseItemCount();
+                                },
+                                splashRadius: 1,
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              Text(
+                                state.myCount.toString(),
+                                style: GoogleFonts.montserrat(
+                                    color: AppColors.lightgreyColor),
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              IconButton(
+                                splashRadius: 1,
+                                icon: const Icon(
+                                  Icons.remove,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .decreaseItemCount();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         InkWell(
                           onTap: () {
                             ref
                                 .read(myProductsDetailsScreenModel.notifier)
-                                .addToCart();
-                            context.router.push(const CartPageRoute());
+                                .addHoodiesToCart(context);
                           },
                           child: CustomButton(
-                            width: 230.0.w,
+                            width: 100.0.w,
                             buttonText: 'Add to Cart',
                           ),
                         )

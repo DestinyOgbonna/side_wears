@@ -1,16 +1,16 @@
 import 'package:building_ui/core/exports/exports.dart';
-import 'package:building_ui/core/services/firebase.dart';
 import 'package:building_ui/core/services/mysharedpref.dart';
 
-class SettingsViewModel extends StateNotifier<SettingsViewState> {
-  SettingsViewModel(this._readServices, this._firestoreCollectionService)
-      : super(SettingsViewState(
+class ProfileViewModel extends StateNotifier<ProfileViewState> {
+  ProfileViewModel(this._readServices, this._firestoreCollectionService)
+      : super(ProfileViewState(
           userModel: UserModel(),
         ));
   final Reader _readServices;
   final FirestoreCollectionService _firestoreCollectionService;
 
   Future<UserModel?> getUsername() async {
+    UserModel? userDetails;
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.usersRef
@@ -19,37 +19,37 @@ class SettingsViewModel extends StateNotifier<SettingsViewState> {
       if (getUser.exists) {
         DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
         final loggedInUsername = UserModel.fromFirestore(getLoggedInUserName);
-        return loggedInUsername;
+        userDetails= loggedInUsername;
       }
     } catch (e) {
       state = state.copyWith(
         loadingState: LoadingState.error,
       );
     }
-    return null;
+    return userDetails;
   }
 
   bool? isNewUser;
   void signOutUser(BuildContext context) async {
-    _readServices(firebaseProvider).signOutUser;
+    _readServices(firebaseAuthService).signOutUser;
     await _readServices(prefProvider).setBool('login', false);
     context.router.replaceAll([const SignInPageRoute()]);
   }
 }
 
-class SettingsViewState {
+class ProfileViewState {
   LoadingState loadingState;
   UserModel userModel;
-  SettingsViewState({
+  ProfileViewState({
     this.loadingState = LoadingState.loading,
     required this.userModel,
   });
 
-  SettingsViewState copyWith({
+  ProfileViewState copyWith({
     LoadingState? loadingState,
     UserModel? userModel,
   }) {
-    return SettingsViewState(
+    return ProfileViewState(
       loadingState: loadingState ?? this.loadingState,
       userModel: userModel ?? this.userModel,
     );

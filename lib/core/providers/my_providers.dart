@@ -1,55 +1,60 @@
 import 'package:building_ui/core/exports/exports.dart';
-import 'package:building_ui/core/providers/theme.dart';
-import 'package:building_ui/core/services/firebase_storage.dart';
-import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.dart';
-import 'package:building_ui/screens/cart/cart_viewmodel.dart';
-import 'package:building_ui/screens/favourite/favourite_viewmodel.dart';
-import 'package:building_ui/screens/payment_flow/paymentflow_viewmodel.dart';
-import 'package:building_ui/screens/profile_update/profile_update_viewmodel.dart';
-import 'package:building_ui/screens/settings/settings_viewmodel.dart';
-import 'package:building_ui/core/services/firebase.dart';
+import 'package:building_ui/core/repository/cart_repository.dart';
+import 'package:building_ui/core/repository/favorites_repository.dart';
+import 'package:building_ui/core/repository/products_repository.dart';
 
 //*SIGN UP PROVIDER
 final mySignUpViewmodel =
     StateNotifierProvider<SignUpViewModel, SignUpViewState>(
   ((ref) => SignUpViewModel(ref.read)),
 );
+
 //*SIGN IN PROVIDER
 final mySignInViewmodel =
     StateNotifierProvider<SignInViewModel, SignInViewState>(
   ((ref) => SignInViewModel(ref.read)),
 );
+
 //*HOMESCREEN PROVIDER
 final myHomeScreenModel =
     StateNotifierProvider<HomeScreenViewModel, HomeScreenState>(
   ((ref) => HomeScreenViewModel(
-        FirestoreCollectionService(),
+        ref.watch(firebaseCollectionService),
+        ref.watch(productRepositiry)
       )),
 );
+
 //*SPLASHSCREEN PROVIDER
 final mySplashScreenModel =
-    StateNotifierProvider.autoDispose<SplashScreenViewModel, SplashScreenState>(
-        ((ref) => SplashScreenViewModel()));
-final myProfileScreenModel =
-    StateNotifierProvider.autoDispose<ProfileViewModel, ProfileState>(
-  ((ref) => ProfileViewModel(FileStorage())),
+    StateNotifierProvider<SplashScreenViewModel, SplashScreenState>(
+        ((ref) => SplashScreenViewModel(ref.read)));
+
+//*PROFILESCREEN PROVIDER
+final myProfileUpdateScreenModel = StateNotifierProvider.autoDispose<
+    ProfileUpdateViewModel, ProfileUpdateState>(
+  ((ref) => ProfileUpdateViewModel(FileStorage(), ref.read)),
 );
 
 //*SETTINGS PROVIDER
-final mySettingsScreenModel =
-    StateNotifierProvider<SettingsViewModel, SettingsViewState>(
-  ((ref) => SettingsViewModel(
+final myprofileScreenModel =
+    StateNotifierProvider<ProfileViewModel, ProfileViewState>(
+  ((ref) => ProfileViewModel(
         ref.read,
-        FirestoreCollectionService(),
+        ref.watch(firebaseCollectionService),
       )),
 );
+
 //*PRODUCT DETAILS PROVIDER
 final myProductsDetailsScreenModel =
     StateNotifierProvider<ProductDetailsViewModel, ProductDetailsViewState>(
   ((ref) => ProductDetailsViewModel(
-        FirestoreCollectionService(),
+        ref.watch(firebaseCollectionService),
+        ref.watch(productRepositiry),
+        ref.watch(cartRepository),
+        ref.watch(favoriteRepository)
       )),
 );
+
 //*PAYMENT SCREEN PROVIDER
 final myPaymentScreenModel =
     StateNotifierProvider<PaymentViewModel, PaymentViewState>(
@@ -58,10 +63,13 @@ final myPaymentScreenModel =
 //*CART PROVIDER
 final myCartcreenModel = StateNotifierProvider<CartViewModel, CartViewState>(
   ((ref) => CartViewModel(
-        FirestoreCollectionService(),
-        FirebaseAuthService(),
+        ref.watch(firebaseCollectionService),
+        ref.watch(firebaseAuthService),
         ProductDetailsViewModel(
-          FirestoreCollectionService(),
+          ref.watch(firebaseCollectionService),
+          ref.watch(productRepositiry),
+          ref.watch(cartRepository),
+          ref.watch(favoriteRepository)
         ),
       )),
 );
@@ -70,10 +78,9 @@ final myCartcreenModel = StateNotifierProvider<CartViewModel, CartViewState>(
 final myFavoritescreenModel =
     StateNotifierProvider<FavoriteViewModel, FavoriteViewState>(
   ((ref) => FavoriteViewModel(
-        FirestoreCollectionService(),
-        ProductDetailsViewModel(
-          FirestoreCollectionService(),
-        ),
+        ref.watch(firebaseAuthService),
+        ref.watch(firebaseCollectionService),
+        ref.watch(favoriteRepository)
       )),
 );
 

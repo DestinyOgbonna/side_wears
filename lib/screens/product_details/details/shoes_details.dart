@@ -1,6 +1,6 @@
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
-import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
+import 'package:building_ui/screens/product_details/widgets/carousel.dart';
 import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -17,19 +17,20 @@ class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
   @override
   void initState() {
     super.initState();
-    ref.read(myProductsDetailsScreenModel.notifier).getProducts();
+    ref.read(myProductsDetailsScreenModel.notifier).getShoes();
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(myProductsDetailsScreenModel);
-  
+
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SizedBox(
           child: FutureBuilder<Product?>(
-            future: ref.watch(myProductsDetailsScreenModel.notifier).getProducts(),
+            future:
+                ref.watch(myProductsDetailsScreenModel.notifier).getShoes(),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Shimmers();
@@ -77,20 +78,33 @@ class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
                       ],
                     ),
                     SizedBox(
-                      height: 25.0.h,
+                      height: 15.0.h,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('${shoeDetails.productName}',
                               style: AppStyles.boldgreyText),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('${shoeDetails.productPrice}',
-                              style: AppStyles.normalgreyText),
+                        InkWell(
+                          onTap: () {
+                            ref
+                                .read(myProductsDetailsScreenModel.notifier)
+                                .toggleFavouriteIcon();
+                          },
+                          child: state.isSelected != true
+                              ? Icon(
+                                  Icons.favorite,
+                                  size: 25.0.h,
+                                  color: AppColors.lightgreyColor,
+                                )
+                              : Icon(
+                                  Icons.favorite_outline_outlined,
+                                  size: 25.0.h,
+                                  color: AppColors.lightgreyColor,
+                                ),
                         ),
                       ],
                     ),
@@ -98,14 +112,11 @@ class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
                       height: 10.0.h,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.expand(height: 100),
-                        child: Text(
-                          '${shoeDetails.productDescription}',
-                          style: AppStyles.mediumgreyText,
-                          textAlign: TextAlign.start,
-                        ),
+                      padding: EdgeInsets.only(left: 8.0.h, right: 8.0.h),
+                      child: Text(
+                        '${shoeDetails.productDescription}',
+                        style: AppStyles.mediumgreyText,
+                        textAlign: TextAlign.start,
                       ),
                     ),
                     SizedBox(
@@ -114,8 +125,8 @@ class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: const [
-                       ShoeSizes(size: 'M'),
-                       ShoeSizes(size: 'L'),
+                        ShoeSizes(size: 'M'),
+                        ShoeSizes(size: 'L'),
                         ShoeSizes(size: 'XL'),
                         ShoeSizes(size: 'XXL'),
                       ],
@@ -126,33 +137,69 @@ class _ShoesDetailsState extends ConsumerState<ShoesDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            ref
-                                .read(myProductsDetailsScreenModel.notifier)
-                                .toggleFavouriteIcon();
-                          },
-                          child: state.isSelected != true
-                              ? Icon(
-                                  Icons.favorite,
-                                  size: 35.0.h,
-                                  color: AppColors.lightgreyColor,
-                                )
-                              : Icon(
-                                  Icons.favorite_outline_outlined,
-                                  size: 35.0.h,
-                                  color: AppColors.lightgreyColor,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('\$${shoeDetails.productPrice}',
+                              style: AppStyles.normalgreyText),
+                        ),
+                        Container(
+                          height: 30.0.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                  width: 1.0, color: AppColors.darkColor)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  size: 18,
                                 ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .increaseItemCount();
+                                },
+                                splashRadius: 1,
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              Text(
+                                state.myCount.toString(),
+                                style: GoogleFonts.montserrat(
+                                    color: AppColors.lightgreyColor),
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              IconButton(
+                                splashRadius: 1,
+                                icon: const Icon(
+                                  Icons.remove,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .decreaseItemCount();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         InkWell(
                           onTap: () {
                             ref
                                 .read(myProductsDetailsScreenModel.notifier)
-                                .addToCart();
+                                .addShoesToCart(context);
                             context.router.push(const CartPageRoute());
                           },
                           child: CustomButton(
-                            width: 230.0.w,
+                            width: 100.0.w,
                             buttonText: 'Add to Cart',
                           ),
                         )

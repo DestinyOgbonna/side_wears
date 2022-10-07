@@ -12,11 +12,11 @@
 
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:building_ui/core/exports/exports.dart' as _i2;
-import 'package:building_ui/screens/Product%20Details/details/hoodie_details.dart'
+import 'package:building_ui/screens/product_details/details/hoodie_details.dart'
     as _i3;
-import 'package:building_ui/screens/Product%20Details/details/shoes_details.dart'
+import 'package:building_ui/screens/product_details/details/shoes_details.dart'
     as _i5;
-import 'package:building_ui/screens/Product%20Details/details/watche_details.dart'
+import 'package:building_ui/screens/product_details/details/watche_details.dart'
     as _i4;
 import 'package:building_ui/screens/splash_screen/splash_screen.dart' as _i1;
 import 'package:flutter/material.dart' as _i7;
@@ -43,10 +43,6 @@ class AppRouter extends _i6.RootStackRouter {
       return _i6.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i2.Home());
     },
-    CartPageRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i2.CartPage());
-    },
     HoodiesDetailsRoute.name: (routeData) {
       return _i6.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i3.HoodiesDetails());
@@ -62,6 +58,18 @@ class AppRouter extends _i6.RootStackRouter {
     ShoesDetailsRoute.name: (routeData) {
       return _i6.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i5.ShoesDetails());
+    },
+    CartPageRoute.name: (routeData) {
+      return _i6.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.CartPage());
+    },
+    PaymentViewRoute.name: (routeData) {
+      return _i6.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.PaymentView());
+    },
+    AddressPageRoute.name: (routeData) {
+      return _i6.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.AddressPage());
     }
   };
 
@@ -71,11 +79,13 @@ class AppRouter extends _i6.RootStackRouter {
         _i6.RouteConfig(SignUpPageRoute.name, path: '/sign_up'),
         _i6.RouteConfig(SignInPageRoute.name, path: '/sign_in'),
         _i6.RouteConfig(HomeRoute.name, path: '/home'),
-        _i6.RouteConfig(CartPageRoute.name, path: '/cart'),
         _i6.RouteConfig(HoodiesDetailsRoute.name, path: '/hoodie'),
         _i6.RouteConfig(WristWatchDetailsRoute.name, path: '/watches'),
-        _i6.RouteConfig(ProfileUpdateRoute.name, path: '/watches'),
-        _i6.RouteConfig(ShoesDetailsRoute.name, path: '/profile')
+        _i6.RouteConfig(ProfileUpdateRoute.name, path: '/profile_update'),
+        _i6.RouteConfig(ShoesDetailsRoute.name, path: '/shoe_details'),
+        _i6.RouteConfig(CartPageRoute.name, path: '/cart'),
+        _i6.RouteConfig(PaymentViewRoute.name, path: '/payment'),
+        _i6.RouteConfig(AddressPageRoute.name, path: '/address')
       ];
 }
 
@@ -112,14 +122,6 @@ class HomeRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.CartPage]
-class CartPageRoute extends _i6.PageRouteInfo<void> {
-  const CartPageRoute() : super(CartPageRoute.name, path: '/cart');
-
-  static const String name = 'CartPageRoute';
-}
-
-/// generated route for
 /// [_i3.HoodiesDetails]
 class HoodiesDetailsRoute extends _i6.PageRouteInfo<void> {
   const HoodiesDetailsRoute()
@@ -140,7 +142,8 @@ class WristWatchDetailsRoute extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.ProfileUpdate]
 class ProfileUpdateRoute extends _i6.PageRouteInfo<void> {
-  const ProfileUpdateRoute() : super(ProfileUpdateRoute.name, path: '/watches');
+  const ProfileUpdateRoute()
+      : super(ProfileUpdateRoute.name, path: '/profile_update');
 
   static const String name = 'ProfileUpdateRoute';
 }
@@ -148,7 +151,32 @@ class ProfileUpdateRoute extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i5.ShoesDetails]
 class ShoesDetailsRoute extends _i6.PageRouteInfo<void> {
-  const ShoesDetailsRoute() : super(ShoesDetailsRoute.name, path: '/profile');
+  const ShoesDetailsRoute()
+      : super(ShoesDetailsRoute.name, path: '/shoe_details');
 
   static const String name = 'ShoesDetailsRoute';
+}
+
+/// generated route for
+/// [_i2.CartPage]
+class CartPageRoute extends _i6.PageRouteInfo<void> {
+  const CartPageRoute() : super(CartPageRoute.name, path: '/cart');
+
+  static const String name = 'CartPageRoute';
+}
+
+/// generated route for
+/// [_i2.PaymentView]
+class PaymentViewRoute extends _i6.PageRouteInfo<void> {
+  const PaymentViewRoute() : super(PaymentViewRoute.name, path: '/payment');
+
+  static const String name = 'PaymentViewRoute';
+}
+
+/// generated route for
+/// [_i2.AddressPage]
+class AddressPageRoute extends _i6.PageRouteInfo<void> {
+  const AddressPageRoute() : super(AddressPageRoute.name, path: '/address');
+
+  static const String name = 'AddressPageRoute';
 }

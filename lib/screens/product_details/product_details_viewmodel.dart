@@ -1,12 +1,17 @@
-import 'dart:developer';
-
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
+import 'package:building_ui/core/repository/cart_repository.dart';
+import 'package:building_ui/core/repository/favorites_repository.dart';
+import 'package:building_ui/core/repository/products_repository.dart';
 
 class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
-  ProductDetailsViewModel(this._firestoreCollectionService)
+  ProductDetailsViewModel(this._firestoreCollectionService,
+      this.productsRepository, this.cartRepository, this.favoriteRepository)
       : super(ProductDetailsViewState(productModel: Product()));
   final FirestoreCollectionService _firestoreCollectionService;
+  final ProductsRepository productsRepository;
+  final CartRepository cartRepository;
+  final FavoriteRepository favoriteRepository;
 
   String? prodID;
 
@@ -14,104 +19,90 @@ class ProductDetailsViewModel extends StateNotifier<ProductDetailsViewState> {
     prodID = selectedprodID;
   }
 
+  void increaseItemCount() {
+    state = state.copyWith(myCount: state.myCount = state.myCount + 1);
+  }
+
+  void decreaseItemCount() {
+    state = state.copyWith(myCount: state.myCount = state.myCount - 1);
+  }
+
 //*  GETTING PRODUCT DETAILS FROM SHOES SECTION
-  Future<Product?> getProducts() async {
+
+  Future<Product?> getShoes() async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> getUser =
-          await _firestoreCollectionService.shoesRef.doc(prodID).get()
-              as DocumentSnapshot<Map<String, dynamic>>;
-      if (getUser.exists) {
-        DocumentSnapshot<Map<String, dynamic>> getProductDetails = getUser;
-        final showProductDetails = Product.fromFirestore(getProductDetails);
-        return showProductDetails;
-      }
+      return await productsRepository.getProductDetails(
+          reference: _firestoreCollectionService.shoesRef, productId: prodID!);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      rethrow;
     }
-    return null;
   }
 
 //*  GETTING PRODUCT DETAILS FROM WristWatch SECTION
   Future<Product?> getWristWatch() async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> getWatchProducts =
-          await _firestoreCollectionService.watchesRef.doc(prodID).get()
-              as DocumentSnapshot<Map<String, dynamic>>;
-      if (getWatchProducts.exists) {
-        DocumentSnapshot<Map<String, dynamic>> getWatchDetail =
-            getWatchProducts;
-        final showProductDetails = Product.fromFirestore(getWatchDetail);
-        return showProductDetails;
-      }
+      return await productsRepository.getProductDetails(
+          reference: _firestoreCollectionService.watchesRef,
+          productId: prodID!);
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
 //*  GETTING PRODUCT DETAILS FROM HOODIES SECTION
-  Future<Product?> getHoddies() async {
+
+  Future<Product?> getHoodies() async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> getHoodieproducts =
-          await _firestoreCollectionService.hoodieRef.doc(prodID).get()
-              as DocumentSnapshot<Map<String, dynamic>>;
-      if (getHoodieproducts.exists) {
-        DocumentSnapshot<Map<String, dynamic>> getHoodieDetail =
-            getHoodieproducts;
-
-        final showProductDetails = Product.fromFirestore(getHoodieDetail);
-
-        return showProductDetails;
-      }
+      return await productsRepository.getProductDetails(
+          reference: _firestoreCollectionService.hoodieRef, productId: prodID!);
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
-//!NEEDS TO BE REPEATED
-  Future<Product?> addToCart() async {
+//*ADD HOODIES TO CART
+  Future<Product?> addHoodiesToCart(BuildContext context) async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> getUser =
-          await _firestoreCollectionService.watchesRef.doc(prodID).get()
-              as DocumentSnapshot<Map<String, dynamic>>;
-      if (getUser.exists) {
-        state = state.copyWith(
-          loadingState: LoadingState.loading,
-        );
-        final showProductDetails = Product.fromFirestore(getUser);
-        state = state.copyWith(
-          loadingState: LoadingState.success,
-          productModel: showProductDetails,
-        );
-        _firestoreCollectionService.usersRef
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .collection('Cart')
-            .doc('$prodID')
-            .set({
-          'product_name': showProductDetails.productName,
-          'product_price': showProductDetails.productPrice,
-          'product_description': showProductDetails.productDescription,
-          'product_image': showProductDetails.productImages,
-        });
-        Fluttertoast.showToast(
-            msg: 'Added to Cart',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.SNACKBAR,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return showProductDetails;
-      }
+      return await cartRepository.addToCart(
+          referenceProduct: _firestoreCollectionService.hoodieRef,
+          productId: prodID!,
+          referenceUser: _firestoreCollectionService.usersRef, context: context);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      rethrow;
     }
-    return null;
+  }
+
+  //*ADD HOODIES TO Shoes
+  Future<Product?> addShoesToCart(BuildContext context) async {
+    try {
+      return await cartRepository.addToCart(
+          referenceProduct: _firestoreCollectionService.shoesRef,
+          productId: prodID!,
+          referenceUser: _firestoreCollectionService.usersRef, context: context);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //*ADD HOODIES TO Watches
+  Future<Product?> addWatchesToCart(BuildContext context) async {
+    try {
+      return await cartRepository.addToCart(
+          referenceProduct: _firestoreCollectionService.watchesRef,
+          productId: prodID!,
+          referenceUser: _firestoreCollectionService.usersRef, context: context);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future removeFromFavorite() async {
+    try {
+      return await favoriteRepository.removeFromFavorite(
+          reference: _firestoreCollectionService.usersRef, productId: prodID!);
+    } catch (e) {
+      rethrow;
+    }
   }
 
 //!NEEDS TO BE REPEATED
@@ -187,8 +178,10 @@ class ProductDetailsViewState {
   LoadingState loadingState;
   Product productModel;
   bool isSelected;
+  int myCount;
 
   ProductDetailsViewState({
+    this.myCount = 0,
     this.isSelected = true,
     this.productId = '',
     this.loadingState = LoadingState.loading,
@@ -200,12 +193,13 @@ class ProductDetailsViewState {
     Product? productModel,
     LoadingState? loadingState,
     bool? isSelected,
+    int? myCount,
   }) {
     return ProductDetailsViewState(
-      productId: productId ?? this.productId,
-      isSelected: isSelected ?? this.isSelected,
-      productModel: productModel ?? this.productModel,
-      loadingState: loadingState ?? this.loadingState,
-    );
+        productId: productId ?? this.productId,
+        isSelected: isSelected ?? this.isSelected,
+        productModel: productModel ?? this.productModel,
+        loadingState: loadingState ?? this.loadingState,
+        myCount: myCount ?? this.myCount);
   }
 }

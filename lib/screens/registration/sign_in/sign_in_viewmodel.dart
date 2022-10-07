@@ -1,12 +1,10 @@
 import 'package:building_ui/core/exports/exports.dart';
-import 'package:building_ui/core/services/firebase.dart';
 import 'package:building_ui/core/services/mysharedpref.dart';
 
 class SignInViewModel extends StateNotifier<SignInViewState> {
   SignInViewModel(this._readServices) : super(SignInViewState());
 
   final Reader _readServices;
-  bool? isNewUser;
 
   obscurePassword() {
     state = state.copyWith(isSelected: !state.isSelected);
@@ -14,14 +12,6 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
 
   showProgressBar() {
     state = state.copyWith(isProgress: !state.isProgress);
-  }
-
-  void saveUserLoginState(BuildContext context) async {
-    isNewUser = await _readServices(prefProvider).getBool('login') ?? false;
-
-    if (isNewUser == true) {
-      context.router.replaceAll(const [HomeRoute()]);
-    }
   }
 
   Future signUserIntoApp(
@@ -41,7 +31,7 @@ class SignInViewModel extends StateNotifier<SignInViewState> {
         state = state.copyWith(loadingState: LoadingState.error);
         context.router.push(const SignInPageRoute());
       } else {
-        final signUser = _readServices(firebaseProvider)
+        final signUser = _readServices(firebaseAuthService)
             .signInWithEmailAndPassword(
                 email: emailController.trim(),
                 password: passwordController.trim())

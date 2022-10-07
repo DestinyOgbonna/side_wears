@@ -1,4 +1,5 @@
 import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/repository/products_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -12,16 +13,20 @@ void main() {
   late HomeScreenViewModel sut;
   late DocumentSnapshot docsSnap;
   late FirestoreCollectionService collectionService;
+  late ProductsRepository productsRepository;
+  late UserModel userModel;
 
   setUp(() {
     collectionService = FireStoreCollectionServiceMock();
-    sut = HomeScreenViewModel(collectionService);
+    productsRepository = ProductsRepository();
+    sut = HomeScreenViewModel(collectionService, productsRepository);
     docsSnap = MockDocumentSnapshot();
-    sut.getShoeProducts();
+    userModel = UserModel();
   });
 
-  group('HomeViewMOdel Test', () {
-    test('Function Recieves a String  containing the username from Firebase',
+  group('HomeViewModel Test', () {
+    test(
+        'Function Recieves a String of type UserModel  containing the username from Firebase',
         () async {
       when(() => collectionService.usersRef
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -29,10 +34,10 @@ void main() {
       when(() => docsSnap.data()).thenReturn({'username': 'Destiny'});
       when(() => docsSnap.exists).thenReturn(true);
       final result = await sut.getUsername();
-      expect(result, null);
+      expect(result, userModel);
     });
 
-    test('Function Recieves a List containing the ShoeProducts from Firebase',
+    test('Function Recieves a list containing the ShoeProducts from Firebase',
         () async {
       when(() => collectionService.shoesRef
           .doc(FirebaseAuth.instance.currentUser!.uid)

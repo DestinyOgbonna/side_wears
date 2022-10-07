@@ -22,6 +22,6 @@ class FirebaseAuthService {
   }
 }
 
-final firebaseProvider = Provider((ref) {
+final firebaseAuthService = Provider<FirebaseAuthService>((ref) {
   return FirebaseAuthService();
 });

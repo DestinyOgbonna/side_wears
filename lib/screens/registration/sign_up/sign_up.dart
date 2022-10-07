@@ -12,12 +12,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final bool _isHidden = true;
 
   @override
   void initState() {
     super.initState();
-    ref.read(mySplashScreenModel.notifier).checkInternetConnection();
   }
 
   @override

@@ -1,10 +1,5 @@
-import 'dart:developer';
-
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
-import 'package:building_ui/core/services/firebase.dart';
-
-import '../Product Details/product_details_viewmodel.dart';
 
 class CartViewModel extends StateNotifier<CartViewState> {
   CartViewModel(
@@ -13,6 +8,7 @@ class CartViewModel extends StateNotifier<CartViewState> {
   final FirestoreCollectionService _firestoreCollectionService;
   final FirebaseAuthService _firebaseAuthService;
   ProductDetailsViewModel prod;
+  num totalPrice = 0;
 
   Future<List<Product>> getProductsFromCart() async {
     List<Product> cartProducts = [];
@@ -27,27 +23,15 @@ class CartViewModel extends StateNotifier<CartViewState> {
             getCartItems.docs;
         final displayCartItems =
             showCartItems.map((cart) => Product.fromFirestore(cart)).toList();
+        for (int i = 0; i < displayCartItems.length; i++) {
+          totalPrice += displayCartItems[i].productPrice!;
+        }
         cartProducts = displayCartItems;
       }
-    } catch (e) {}
-
+    } catch (e) {
+      rethrow;
+    }
     return cartProducts;
-  }
-
-  Future<void> removeFromCart() async {
-    _firestoreCollectionService.usersRef
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('Favorites')
-        .doc(prod.prodID)
-        .delete();
-    Fluttertoast.showToast(
-        msg: 'Removed From Favorites',
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 }
 

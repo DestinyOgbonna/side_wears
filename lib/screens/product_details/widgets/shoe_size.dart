@@ -16,3 +16,20 @@ class ShoeSizes extends StatelessWidget {
     );
   }
 }
+
+class WatchType extends StatelessWidget {
+  const WatchType({Key? key, required this.size}) : super(key: key);
+  final String size;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColors.lightgreyColor),
+          borderRadius: BorderRadius.circular(15)),
+      height: 25.0.h,
+      width: 70.0.h,
+      child: Text(size, style: AppStyles.paymentText),
+    );
+  }
+}

@@ -5,6 +5,7 @@ class MyAppBar extends ConsumerWidget {
       {Key? key,
       required this.title,
       this.isProfile,
+      this.sideWidget,
       this.onPressed,
       required this.isSettings})
       : super(key: key);
@@ -13,6 +14,7 @@ class MyAppBar extends ConsumerWidget {
   final bool? isSettings;
   final bool? isProfile;
   final void Function()? onPressed;
+  final Widget? sideWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool _isSetting = isSettings ?? false;
@@ -48,25 +50,10 @@ class MyAppBar extends ConsumerWidget {
                   style: AppStyles.mediumgreyText,
                 )),
               )
-            : _isProfile
-                ? Padding(
-                    padding: EdgeInsets.only(right: 18.0.h),
-                    child: const Center(child: Text('')),
-                  )
-                : Center(
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        color: AppColors.whiteColor,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartPage()));
-                      },
-                    ),
-                  ),
+            : Padding(
+                padding: EdgeInsets.only(right: 18.0.h),
+                child: Center(child: sideWidget),
+              )
       ],
     );
   }

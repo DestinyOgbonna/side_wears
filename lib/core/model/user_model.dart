@@ -18,7 +18,7 @@ class UserModel {
         name: data?['name'],
         email: data?['email'],
         username: data?['username'],
-        profileImage: data?['profile_image']);
+        profileImage: data?['user_image']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -27,7 +27,7 @@ class UserModel {
       if (name != null) "name": name,
       if (email != null) "email": email,
       if (username != null) "username": username,
-      if (profileImage != null) "profile_image": profileImage,
+      if (profileImage != null) "user_image": profileImage,
     };
   }
 }

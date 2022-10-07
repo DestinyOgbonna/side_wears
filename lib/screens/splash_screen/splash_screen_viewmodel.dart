@@ -1,11 +1,15 @@
 import 'package:building_ui/core/exports/exports.dart';
+import 'package:building_ui/core/services/mysharedpref.dart';
 
 class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
-  SplashScreenViewModel() : super(SplashScreenState());
+  SplashScreenViewModel(this._readServices) : super(SplashScreenState());
 
-  checkInternetConnection() async {
-    final ConnectivityResult result = await Connectivity().checkConnectivity();
-    switch (result) {
+  final Reader _readServices;
+  bool? isNewUser;
+
+  checkInternetConnection(BuildContext context) async {
+    final connectionType = await Connectivity().checkConnectivity();
+    switch (connectionType) {
       case ConnectivityResult.mobile:
         Fluttertoast.showToast(
             msg: 'Connected to mobile',
@@ -18,14 +22,6 @@ class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
 
         break;
       case ConnectivityResult.bluetooth:
-        Fluttertoast.showToast(
-            msg: 'Connected to bluetooth',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.SNACKBAR,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
         break;
       case ConnectivityResult.wifi:
         Fluttertoast.showToast(
@@ -38,16 +34,9 @@ class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
             fontSize: 16.0);
         break;
       case ConnectivityResult.ethernet:
-        Fluttertoast.showToast(
-            msg: 'Connected to ethernet',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.SNACKBAR,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
         break;
       case ConnectivityResult.none:
+       context.router.pop();
         Fluttertoast.showToast(
             msg: 'No internet Connection pls check network',
             toastLength: Toast.LENGTH_LONG,
@@ -56,7 +45,20 @@ class SplashScreenViewModel extends StateNotifier<SplashScreenState> {
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
+        
+
         break;
+    }
+  }
+
+  void saveUserLoginState(BuildContext context) async {
+    isNewUser = await _readServices(prefProvider).getBool('login') ?? false;
+
+    if (isNewUser == true) {
+      await Future.delayed(const Duration(seconds: 5));
+      context.router.replaceAll(const [HomeRoute()]);
+    } else if (isNewUser == false) {
+      context.router.replaceAll(const [SignInPageRoute()]);
     }
   }
 }

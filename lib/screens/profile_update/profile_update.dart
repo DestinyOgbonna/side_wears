@@ -25,7 +25,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(myProfileScreenModel);
+    final state = ref.watch(myProfileUpdateScreenModel);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0.h),
@@ -55,7 +55,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
                             InkWell(
                               onTap: () {
                                 ref
-                                    .watch(myProfileScreenModel.notifier)
+                                    .watch(myProfileUpdateScreenModel.notifier)
                                     .uploadProfileImageFromCamera();
                                 context.router.pop();
                               },
@@ -67,7 +67,7 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
                             InkWell(
                               onTap: () {
                                 ref
-                                    .watch(myProfileScreenModel.notifier)
+                                    .watch(myProfileUpdateScreenModel.notifier)
                                     .uploadProfileImageFromGallery();
                                 context.router.pop();
                               },
@@ -187,13 +187,17 @@ class _ProfileUpdateState extends ConsumerState<ProfileUpdate> {
             Center(
                 child: InkWell(
                     onTap: () {
-                      ref.read(myProfileScreenModel.notifier).showProgressBar();
-                      ref.read(myProfileScreenModel.notifier).updateUserDetails(
-                          phoneController.text,
-                          nameController.text,
-                          userNameController.text,
-                          addressController.text,
-                          context);
+                      ref
+                          .read(myProfileUpdateScreenModel.notifier)
+                          .showProgressBar();
+                      ref
+                          .read(myProfileUpdateScreenModel.notifier)
+                          .updateUserDetails(
+                              phoneController.text,
+                              nameController.text,
+                              userNameController.text,
+                              addressController.text,
+                              context);
                     },
                     child: state.isProgress != true
                         ? CustomButton(buttonText: 'Submit', width: 150.0.w)

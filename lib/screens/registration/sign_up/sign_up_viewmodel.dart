@@ -1,5 +1,4 @@
 import 'package:building_ui/core/exports/exports.dart';
-import 'package:building_ui/core/services/firebase.dart';
 
 class SignUpViewModel extends StateNotifier<SignUpViewState> {
   SignUpViewModel(this._readServices)
@@ -15,12 +14,13 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
     state = state.copyWith(isProgress: !state.isProgress);
   }
 
-  Future signUpUser(
-      {required String emailController,
-      required String passwordController,
-      required String nameController,
-      required String userNameController,
-      required BuildContext context}) async {
+  Future signUpUser({
+    required String emailController,
+    required String passwordController,
+    required String nameController,
+    required String userNameController,
+    required BuildContext context,
+  }) async {
     if (emailController.isEmpty ||
         passwordController.isEmpty ||
         userNameController.isEmpty ||
@@ -37,7 +37,7 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
       context.router.pop();
     } else {
       try {
-        final signUpUser = _readServices(firebaseProvider)
+        final signUpUser = _readServices(firebaseAuthService)
             .createNewUser(
                 email: emailController.toString().trim(),
                 password: passwordController.toString().trim())
@@ -51,7 +51,11 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
               textColor: Colors.white,
               fontSize: 16.0);
           addUserData(emailController, nameController, userNameController);
-          context.router.replaceAll(const [SignInPageRoute()]);
+          context.router.replaceAll(
+            const [
+              SignInPageRoute(),
+            ],
+          );
           state = state.copyWith(loadingState: LoadingState.success);
         }).catchError((err) {
           Fluttertoast.showToast(
@@ -94,7 +98,6 @@ class SignUpViewModel extends StateNotifier<SignUpViewState> {
               textColor: Colors.white,
               fontSize: 16.0);
         }
-
         state = state.copyWith(loadingState: LoadingState.error);
       } on SocketException {
         Fluttertoast.showToast(

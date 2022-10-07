@@ -1,16 +1,21 @@
+import 'dart:developer';
+
 import 'package:building_ui/core/exports/exports.dart';
-import 'package:building_ui/core/services/firebase_storage.dart';
+import 'package:building_ui/core/services/mysharedpref.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileViewModel extends StateNotifier<ProfileState> {
-  ProfileViewModel(this.storage) : super(ProfileState());
+class ProfileUpdateViewModel extends StateNotifier<ProfileUpdateState> {
+  ProfileUpdateViewModel(this.storage, this._readServices)
+      : super(ProfileUpdateState());
 
   final picker = ImagePicker();
   final FileStorage storage;
   late String imagepath;
   late String imagename;
+  String? downloadUrl;
+  final Reader _readServices;
   String? getUserImage;
 
   showProgressBar() {
@@ -48,6 +53,11 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
     Reference ref = storage.firebaseStorage.ref().child(imagepath);
     await ref.putFile(file);
     getUserImage = await ref.getDownloadURL();
+    await _readServices(prefProvider).setString(
+      'imageUrl',
+      '$getUserImage',
+    );
+    log('UEEEEEEEEEEEEE : $getUserImage');
     return getUserImage;
   }
 
@@ -97,6 +107,10 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
           fontSize: 16.0);
     } else {
       try {
+        final profileImage = await _readServices(prefProvider).getString(
+          'imageUrl',
+        );
+        log('message : $profileImage');
         final changeUserDetails = FirebaseFirestore.instance
             .collection('users')
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -105,7 +119,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
           'username': userNameController.toString().trim(),
           'name': nameController.toString().trim(),
           'address': addressController.toString().trim(),
-          'user_image': getUserImage
+          'user_image': profileImage
         }).then((value) {
           upLoad();
           Fluttertoast.showToast(
@@ -154,7 +168,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
   }
 }
 
-class ProfileState {
+class ProfileUpdateState {
   File? image;
   String? imagepath;
   String? imagename;
@@ -162,7 +176,7 @@ class ProfileState {
   LoadingState loadingState;
   bool isProgress;
   String? getImageUrl;
-  ProfileState(
+  ProfileUpdateState(
       {this.loadingState = LoadingState.loading,
       this.image,
       this.getImageUrl,
@@ -171,7 +185,7 @@ class ProfileState {
       this.imagename,
       this.imagepath});
 
-  ProfileState copyWith({
+  ProfileUpdateState copyWith({
     LoadingState? loadingState,
     String? getImageUrl,
     String? imagepath,
@@ -180,7 +194,7 @@ class ProfileState {
     String? getUserImage,
     File? image,
   }) {
-    return ProfileState(
+    return ProfileUpdateState(
         loadingState: loadingState ?? this.loadingState,
         image: image ?? this.image,
         isProgress: isProgress ?? this.isProgress,

@@ -14,3 +14,7 @@ class FirestoreCollectionService {
   final CollectionReference hoodieRef =
       FirebaseFirestore.instance.collection('hoodie');
 }
+
+final firebaseCollectionService = Provider<FirestoreCollectionService>((ref) {
+  return FirestoreCollectionService() ;
+});

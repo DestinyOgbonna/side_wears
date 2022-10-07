@@ -1,8 +1,9 @@
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
+import 'package:building_ui/core/repository/products_repository.dart';
 
 class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
-  HomeScreenViewModel(this._firestoreCollectionService)
+  HomeScreenViewModel(this._firestoreCollectionService, this.productsRepository)
       : super(
           HomeScreenState(
             userModel: UserModel(),
@@ -10,10 +11,12 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
           ),
         );
   final FirestoreCollectionService _firestoreCollectionService;
+  final ProductsRepository productsRepository;
 
   //**************************    Getting the user name of the logged in user   ***************
 
   Future<UserModel?> getUsername() async {
+    UserModel? userDetails;
     try {
       final DocumentSnapshot<Map<String, dynamic>> getUser =
           await _firestoreCollectionService.usersRef
@@ -22,101 +25,65 @@ class HomeScreenViewModel extends StateNotifier<HomeScreenState> {
       if (getUser.exists) {
         DocumentSnapshot<Map<String, dynamic>> getLoggedInUserName = getUser;
         final loggedInUsername = UserModel.fromFirestore(getLoggedInUserName);
-        return loggedInUsername;
+        userDetails = loggedInUsername;
       }
     } catch (e) {
       rethrow;
     }
-    return null;
+    return userDetails;
   }
 
 //********************     Getting Shoe Products Fromt the DB  ***********************
 
-  Future<List<Product>> getShoeProducts() async {
-    List<Product> shoeProducts = [];
+  Future<List<Product>?> getShoeProducts() async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.shoesRef.get()
-              as QuerySnapshot<Map<String, dynamic>>;
-      if (getProducts.docs.isNotEmpty) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
-            getProducts.docs;
-        final product =
-            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        shoeProducts = product;
-      }
+      return await productsRepository.getProducts(
+          reference: _firestoreCollectionService.shoesRef);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      // state = state.copyWith(
+      //   loadingState: LoadingState.error,
+      // );
+      rethrow;
     }
-    return shoeProducts;
   }
 
   //********************     Getting Hoodies Products Fromt the DB  ***********************
   Future<List<Product>> getHoodiesProducts() async {
-    List<Product> hoodieProducts = [];
     try {
-      final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.hoodieRef.get()
-              as QuerySnapshot<Map<String, dynamic>>;
-      if (getProducts.docs.isNotEmpty) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
-            getProducts.docs;
-        final product =
-            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        hoodieProducts = product;
-      }
+      return await productsRepository.getProducts(
+          reference: _firestoreCollectionService.hoodieRef);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      // state = state.copyWith(
+      //   loadingState: LoadingState.error,
+      // );
+      rethrow;
     }
-    return hoodieProducts;
   }
 
   //********************     Getting Hoodies Products Fromt the DB  ***********************
   Future<List<Product>> getWearsProducts() async {
-    List<Product> wearsProducts = [];
     try {
-      final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.shirtsRef.get()
-              as QuerySnapshot<Map<String, dynamic>>;
-      if (getProducts.docs.isNotEmpty) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
-            getProducts.docs;
-        final product =
-            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        wearsProducts = product;
-      }
+      return await productsRepository.getProducts(
+          reference: _firestoreCollectionService.shirtsRef);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      // state = state.copyWith(
+      //   loadingState: LoadingState.error,
+      // );
+      rethrow;
     }
-    return wearsProducts;
   }
 
   //********************     Getting Watches Products Fromt the DB  ***********************
   Future<List<Product>> getWatchesProducts() async {
-    List<Product> watchesProducts = [];
     try {
-      final QuerySnapshot<Map<String, dynamic>> getProducts =
-          await _firestoreCollectionService.watchesRef.get()
-              as QuerySnapshot<Map<String, dynamic>>;
-      if (getProducts.docs.isNotEmpty) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> shoes =
-            getProducts.docs;
-        final product =
-            shoes.map((shoe) => Product.fromFirestore(shoe)).toList();
-        watchesProducts = product;
-      }
+      return await productsRepository.getProducts(
+          reference: _firestoreCollectionService.watchesRef);
     } catch (e) {
-      state = state.copyWith(
-        loadingState: LoadingState.error,
-      );
+      // state = state.copyWith(
+      //   loadingState: LoadingState.error,
+      // );
+      rethrow;
     }
-    return watchesProducts;
   }
 }
 

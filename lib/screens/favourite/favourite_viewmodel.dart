@@ -1,54 +1,34 @@
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
-import 'package:building_ui/screens/Product%20Details/product_details_viewmodel.dart';
+import 'package:building_ui/core/repository/favorites_repository.dart';
 
 class FavoriteViewModel extends StateNotifier<FavoriteViewState> {
-  FavoriteViewModel(this._firestoreCollectionService, this.prod)
-      : super(FavoriteViewState());
+  FavoriteViewModel(
+    this._firebaseAuthService,
+    this._firestoreCollectionService,
+    this.favoriteRepository,
+  ) : super(FavoriteViewState());
   final FirestoreCollectionService _firestoreCollectionService;
-
-  ProductDetailsViewModel prod;
+  final FirebaseAuthService _firebaseAuthService;
+  final FavoriteRepository favoriteRepository;
 
   Future<List<Product>> getProductsFromFavorite() async {
-    List<Product> cartProducts = [];
     try {
-      final QuerySnapshot<Map<String, dynamic>> getCartItems =
-          await _firestoreCollectionService.usersRef
-              .doc(FirebaseAuth.instance.currentUser!.uid)
-              .collection('Favorites')
-              .get();
-      if (getCartItems.docs.isNotEmpty) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> showCartItems =
-            getCartItems.docs;
-        final displayCartItems =
-            showCartItems.map((cart) => Product.fromFirestore(cart)).toList();
-        cartProducts = displayCartItems;
-      }
+      return await favoriteRepository.getProductsFromFavorite(
+          reference: _firestoreCollectionService.usersRef);
     } catch (e) {
       rethrow;
     }
 
-    return cartProducts;
   }
 
-  Future removeFromFavorite() async {
-    try {
-      _firestoreCollectionService.usersRef
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('Favorites')
-          .doc(prod.prodID) //!TODO ID NOT FOUND
-          .delete();
-      Fluttertoast.showToast(
-          msg: 'Removed From Favorites',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.SNACKBAR,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } catch (e) {
-      rethrow;
-    }
+//TODO Working need modification
+  Future<void> deleteProductsFromFavorite() async {
+    FirebaseFirestore.instance.collection('Favorites').get().then((value) {
+      for (DocumentSnapshot ds in value.docs) {
+        ds.reference.delete();
+      }
+    });
   }
 }
 

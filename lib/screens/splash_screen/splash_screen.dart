@@ -15,13 +15,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(mySplashScreenModel.notifier).checkInternetConnection();
-    ref.read(mySignInViewmodel.notifier).saveUserLoginState(context);
-    Timer(const Duration(milliseconds: 3000), () {
-      context.router.replaceAll(
-        const [SignUpPageRoute()],
-      );
-    });
+    ref.read(mySplashScreenModel.notifier).checkInternetConnection(context);
+    ref.read(mySplashScreenModel.notifier).saveUserLoginState(context);
     service = LocalNotificationService();
       service.initialize();
       listenToNotification();

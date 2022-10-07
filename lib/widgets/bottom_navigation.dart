@@ -14,7 +14,7 @@ class _HomeState extends ConsumerState<Home> {
     const HomeScreen(),
     const FavoritePage(),
     const SearchView(),
-    const SettingsPage(),
+    const ProfilePage(),
   ];
   int _selectedIndex = 0;
   @override
@@ -23,7 +23,7 @@ class _HomeState extends ConsumerState<Home> {
       body: Center(
           child: IndexedStack(
               index: _selectedIndex,
-              children: _items) //_items.elementAt(_index),
+              children: _items) 
           ),
       bottomNavigationBar: _showBottomNav(),
     );

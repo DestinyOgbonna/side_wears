@@ -1,5 +1,6 @@
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
+import 'package:building_ui/styles/utils/shimmers/cart_shimmer.dart';
 
 class FavoritePage extends ConsumerStatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -20,9 +21,22 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0.h),
-        child: const MyAppBar(
+        child: MyAppBar(
           isSettings: false,
           title: 'Favorite',
+          isProfile: true,
+          sideWidget: InkWell(
+            onTap: () {
+              ref
+                  .read(myFavoritescreenModel.notifier)
+                  .deleteProductsFromFavorite();
+            },
+            child: Icon(
+              Icons.delete,
+              color: AppColors.redColor,
+              size: 25.0.h,
+            ),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -31,8 +45,7 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
           displacement: 250,
           backgroundColor: AppColors.lightgreyColor,
           color: AppColors.whiteColor,
-          strokeWidth: 3,
-          // triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          strokeWidth: 1.0,
           onRefresh: () async {
             ref.watch(myFavoritescreenModel.notifier).getProductsFromFavorite();
           },
@@ -49,9 +62,7 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
+                          return const CartShimmer();
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.data!.isEmpty) {
@@ -70,7 +81,8 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                                   direction: DismissDirection.endToStart,
                                   onDismissed: (_) {
                                     ref
-                                        .read(myFavoritescreenModel.notifier)
+                                        .read(myProductsDetailsScreenModel
+                                            .notifier)
                                         .removeFromFavorite();
                                   },
                                   child: Container(
@@ -86,7 +98,7 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Container(
                                           height: 150.0.h,
@@ -101,56 +113,28 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                                             ),
                                           ),
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 19),
-                                            Text(
-                                                '${favoriteItems[index].productName}',
-                                                style:
-                                                    AppStyles.normalgreyText),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                                '${favoriteItems[index].productPrice}',
-                                                style:
-                                                    AppStyles.normalgreyText),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                                '${favoriteItems[index].productPrice}',
-                                                style:
-                                                    AppStyles.normalgreyText),
-                                          ],
-                                        ),
-                                        Container(
-                                          width: 40,
-                                          decoration: const BoxDecoration(
-                                            color: AppColors.lightgreyColor,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(30),
-                                            ),
-                                          ),
+                                        ConstrainedBox(
+                                          constraints:
+                                              const BoxConstraints.expand(
+                                                  width: 150),
                                           child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              IconButton(
-                                                icon: const Icon(Icons.add),
-                                                onPressed: () {},
-                                                splashRadius: 30,
-                                              ),
+                                              const SizedBox(height: 19),
                                               Text(
-                                                '7',
-                                                style: GoogleFonts.montserrat(
-                                                    color:
-                                                        AppColors.whiteColor),
-                                              ),
-                                              IconButton(
-                                                splashRadius: 30,
-                                                icon: const Icon(Icons.remove),
-                                                onPressed: () {},
-                                              ),
+                                                  '${favoriteItems[index].productName}',
+                                                  style:
+                                                      AppStyles.normalgreyText),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                  '\$${favoriteItems[index].productPrice}',
+                                                  style:
+                                                      AppStyles.smallgreyText),
+                                              const SizedBox(height: 10),
                                             ],
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),

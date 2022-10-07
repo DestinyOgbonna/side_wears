@@ -20,8 +20,7 @@ class CustomButton extends ConsumerWidget {
       decoration: BoxDecoration(
           color: AppColors.lightgreyColor,
           borderRadius: BorderRadius.circular(15)),
-      height: 60,
-      // width: _isFirstStrepperButton ? 370 : 150,
+      height: 40.0.h,
       width: width,
       child: isLoading
           ? const CircularProgressIndicator.adaptive()

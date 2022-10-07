@@ -4,7 +4,6 @@ import 'package:building_ui/screens/home/products_tabs/shoe_tabs.dart';
 import 'package:building_ui/screens/home/products_tabs/watches.dart';
 import 'package:building_ui/screens/home/products_tabs/wears.dart';
 import 'package:building_ui/styles/utils/shimmers/home_shimmer.dart';
-import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
 
 import '../../core/services/local_notification.dart';
 
@@ -28,9 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     service.initialize();
     listenToNotification();
     service.showScheduledNotification();
-    ref.read(myProductsDetailsScreenModel.notifier).getProducts();
     ref.read(myHomeScreenModel.notifier).getUsername();
-    ref.read(myHomeScreenModel.notifier).getShoeProducts();
   }
 
   @override
@@ -80,11 +77,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          'assets/images/person.png'),
-                                      radius: 30,
-                                    ),
+                                    snapshot.data!.profileImage == null
+                                        ? const CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                                'assets/images/person.png'),
+                                            radius: 30,
+                                          )
+                                        : CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                '${snapshot.data?.profileImage}'),
+                                            radius: 30,
+                                          ),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 90.0),
@@ -106,9 +109,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                     ),
                                   ]);
                             }),
-
                         SizedBox(height: 22.0.h),
-
                         Container(
                           height: 150.h,
                           width: double.infinity,
@@ -128,9 +129,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           ),
                         ),
                         SizedBox(
-                          height: 19.0.h,
+                          height: 35.0.h,
                         ),
-                        // give the tab bar a height [can change hheight to preferred height]
                         TabBar(
                           controller: _tabController,
                           indicatorColor: AppColors.purpleColor,
@@ -164,10 +164,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                               ),
                             ),
                           ],
-                        ),
-
+                        ), 
                         SizedBox(
-                          height: 19.0.h,
+                          height: 39.0.h,
                         ),
                         Expanded(
                           child: TabBarView(

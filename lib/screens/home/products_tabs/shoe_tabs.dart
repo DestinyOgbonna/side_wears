@@ -18,7 +18,7 @@ class _ShoesTabState extends ConsumerState<ShoesTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Product>>(
+    return FutureBuilder<List<Product>?>(
       future: ref.read(myHomeScreenModel.notifier).getShoeProducts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

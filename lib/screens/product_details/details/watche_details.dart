@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:building_ui/core/exports/exports.dart';
 import 'package:building_ui/core/model/product_model.dart';
-import 'package:building_ui/screens/Product%20Details/widgets/carousel.dart';
+import 'package:building_ui/screens/product_details/widgets/carousel.dart';
 import 'package:building_ui/styles/utils/shimmers/product_detail_shimmer.dart';
-import 'package:building_ui/styles/utils/shimmers/products_shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class WristWatchDetails extends ConsumerStatefulWidget {
@@ -34,13 +31,13 @@ class _WristWatchDetailsState extends ConsumerState<WristWatchDetails> {
           child: FutureBuilder<Product?>(
             future:
                 ref.read(myProductsDetailsScreenModel.notifier).getWristWatch(),
-            builder: (context,snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Shimmers();
               }
               if (snapshot.connectionState == ConnectionState.done) {
-               final watchDetail = snapshot.data;
-    
+                final watchDetail = snapshot.data;
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -55,8 +52,7 @@ class _WristWatchDetailsState extends ConsumerState<WristWatchDetails> {
                           itemCount: watchDetail!.productImages?.length,
                           itemBuilder:
                               (BuildContext context, int index, int realIndex) {
-                            final image =
-                               watchDetail.productImages![index];
+                            final image = watchDetail.productImages![index];
                             return showImages(image, index);
                           },
                         ),
@@ -83,55 +79,16 @@ class _WristWatchDetailsState extends ConsumerState<WristWatchDetails> {
                       ],
                     ),
                     SizedBox(
-                      height: 25.0.h,
+                      height: 15.0.h,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('${watchDetail.productName}',
                               style: AppStyles.boldgreyText),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('${watchDetail.productPrice}',
-                              style: AppStyles.normalgreyText),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.expand(height: 150),
-                        child: Text(
-                          '${watchDetail.productDescription}',
-                          style: AppStyles.mediumgreyText,
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                        ShoeSizes(size: 'Gold'),
-                        ShoeSizes(size: 'Silver'),
-                        ShoeSizes(size: 'Platinum'),
-                        ShoeSizes(size: 'Classic'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 35.0.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
                         InkWell(
                           onTap: () {
                             ref
@@ -141,24 +98,109 @@ class _WristWatchDetailsState extends ConsumerState<WristWatchDetails> {
                           child: state.isSelected != true
                               ? Icon(
                                   Icons.favorite,
-                                  size: 35.0.h,
-                                  color: AppColors.lightgreyColor,
+                                  size: 25.0.h,
+                                  color: AppColors.redColor,
                                 )
                               : Icon(
                                   Icons.favorite_outline_outlined,
-                                  size: 35.0.h,
+                                  size: 25.0.h,
                                   color: AppColors.lightgreyColor,
                                 ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10.0.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0.h, right: 8.0.h),
+                      child: Text(
+                        '${watchDetail.productDescription}',
+                        style: AppStyles.mediumgreyText,
+                        //textAlign: TextAlign.start,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 35.0.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                        WatchType(size: 'Gold'),
+                        WatchType(size: 'Silver'),
+                        WatchType(size: 'Platinum'),
+                        WatchType(size: 'Classic'),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 35.0.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('\$${watchDetail.productPrice}',
+                              style: AppStyles.normalgreyText),
+                        ),
+                        Container(
+                          height: 30.0.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                  width: 1.0, color: AppColors.darkColor)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .increaseItemCount();
+                                },
+                                splashRadius: 1,
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              Text(
+                                state.myCount.toString(),
+                                style: GoogleFonts.montserrat(
+                                    color: AppColors.lightgreyColor),
+                              ),
+                              SizedBox(
+                                width: 15.0.h,
+                              ),
+                              IconButton(
+                                splashRadius: 1,
+                                icon: const Icon(
+                                  Icons.remove,
+                                  size: 18,
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          myProductsDetailsScreenModel.notifier)
+                                      .decreaseItemCount();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         InkWell(
                           onTap: () {
                             ref
                                 .read(myProductsDetailsScreenModel.notifier)
-                                .addToCart();
+                              .addWatchesToCart(context);
                             context.router.push(const CartPageRoute());
                           },
                           child: CustomButton(
-                            width: 230.0.w,
+                            width: 100.0.w,
                             buttonText: 'Add to Cart',
                           ),
                         )
